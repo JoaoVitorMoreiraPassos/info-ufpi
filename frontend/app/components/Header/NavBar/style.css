@@ -1,0 +1,27 @@
+.navContainer {
+    width: 100%;
+    background: #4985AD;
+    display: flex;
+    flex-direction: row;
+}
+
+.navContainer div {
+    height: 100%;
+}
+
+img {
+    width: 100%;
+    height: 100%;
+}
+
+.homeLink {
+    font-weight: 700;
+}
+
+.navPages div:not(.hamburguerMenu) {
+    height: 3.5rem;
+}
+
+.hamburguerMenu {
+    transition: all 0.5s ease;
+}
