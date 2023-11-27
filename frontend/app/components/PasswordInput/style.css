@@ -1,7 +1,14 @@
-.passwordContainer{
-    background: #4656613D;
-    border: .5px solid #999;
-    transition: all 300ms ease-in-out;
+#passwordInput {
+  border-radius: 1rem 0 0 1rem;
+  border: 0;
+  background: transparent;
+}
+
+.passwordContainer {
+  background: #4656613D;
+  border: .5px solid #999;
+  transition: all 300ms ease-in-out;
+  border-radius: .9rem;
 }
 
 .passwordContainer:focus-within {

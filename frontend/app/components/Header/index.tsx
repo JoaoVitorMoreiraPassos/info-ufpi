@@ -7,7 +7,7 @@ const inria_serif = Inria_Serif({ weight: "700", subsets: ['latin'], })
 
 const Header = () => {
   return (
-    <div className={` h-16 navContainer navbar-center text-white text-xl flex-row items-center justify-between ${inria_serif.className}`}>
+    <div className={`  h-20 navContainer navbar-center text-white text-xl flex-row items-center justify-between ${inria_serif.className}`}>
       <NavBar />
       <ProfileBar />
     </div>
