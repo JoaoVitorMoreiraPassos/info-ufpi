@@ -1,5 +1,5 @@
 import React from 'react'
-import NoticeCard from '../NoticeCard'
+import NoticeCard from '../NoticeCardHome'
 import RecentNotice from './RecentNotice'
 import { Inter } from 'next/font/google'
 import './style.css'
