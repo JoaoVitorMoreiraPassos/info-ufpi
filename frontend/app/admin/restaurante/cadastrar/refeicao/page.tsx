@@ -109,7 +109,7 @@ export default function CadastrarNoticia() {
                                     regular_recipes.map(item => {
                                         if (item.type === 'normal-recipe') {
                                             return (
-                                                <option value={item.id}>{item.name}</option>
+                                                <option value={item.id} key={'ref' + item.id}>{item.name}</option>
                                             )
                                         }
                                     })
@@ -126,7 +126,7 @@ export default function CadastrarNoticia() {
                                     veg_recipes.map(item => {
                                         if (item.type === 'veg-recipe') {
                                             return (
-                                                <option value={item.id}>{item.name}</option>
+                                                <option value={item.id} key={'ref_veg' + item.id}>{item.name}</option>
                                             )
                                         }
                                     })
