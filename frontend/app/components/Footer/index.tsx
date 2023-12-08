@@ -4,6 +4,7 @@ import React from 'react'
 import Instagram from '@mui/icons-material/Instagram';
 import { Facebook, Twitter, WhatsApp } from '@mui/icons-material';
 import Image from 'next/image'
+import Link from 'next/link'
 
 const Footer = () => {
     return (
@@ -14,18 +15,18 @@ const Footer = () => {
             <div className="footer-paginas">
                 <h4 className='underline'>INFO UFPI</h4>
                 <ul className='flex-column gap-3 mt-4'>
-                    <li><a href="/">Home</a></li>
-                    <li><a href="/nae/">NAE</a></li>
-                    <li><a href="/sobre/">Sobre</a></li>
-                    <li><a href="/contato/">Contato</a></li>
+                    <li><Link href="/">Home</Link></li>
+                    <li><Link href="/nae/">NAE</Link></li>
+                    <li><Link href="/sobre/">Sobre</Link></li>
+                    <li><Link href="/contato/">Contato</Link></li>
                 </ul>
             </div>
             <div className="footer-projeto">
                 <h4 className='underline'>PROJETO</h4>
                 <ul className='flex-column gap-3 mt-4'>
-                    <li><a href="#">Suporte</a></li>
-                    <li><a href="#">Política de privacidade</a></li>
-                    <li><a href="#">Termos de uso</a></li>
+                    <li><Link href="#">Suporte</Link></li>
+                    <li><Link href="#">Política de privacidade</Link></li>
+                    <li><Link href="#">Termos de uso</Link></li>
                 </ul>
             </div>
         </div>

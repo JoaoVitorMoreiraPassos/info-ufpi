@@ -1,16 +1,28 @@
-import SideBar from './components/SideBar'
-import HomeContent from './components/MainContent/HomeContent'
-import '../app/globals.css'
-import Header from './components/Header'
+import React from 'react'
+import { metadata } from './layout'
+import HomeContent from '@/app/components/MainContent/HomeContent'
+import SideBar from '@/app/components/SideBar'
+import Header from '@/app/components/Header'
+import Footer from '@/app/components/Footer'
+import '@/app/globals.css'
+import '@/app/style.css'
 
 export default function Home() {
+  metadata.title = 'Home'
   return (
-    <main className="flex flex-row justify-start" >
-      <SideBar />
-      <div className='mainContainer border-l'>
-        <Header />
-        <HomeContent />
-      </div>
-    </main>
+    <div>
+      <div className="flex min-h-screen flex-row justify-start">
+        <SideBar />
+        <div className='mainContainer border-l'>
+          <Header page_index={0} />
+          <main>
+            <HomeContent />
+          </main>
+        </div>
+      </div >
+      <footer>
+        <Footer />
+      </footer>
+    </div>
   )
 }

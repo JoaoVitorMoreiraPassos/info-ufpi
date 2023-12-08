@@ -1,21 +1,25 @@
 import React from 'react'
-import { metadata } from '../layout'
-import SideBar from '../components/SideBar'
 import AboutContent from '../components/MainContent/AboutContent'
-import './style.css'
+import SideBar from '../components/SideBar'
 import Header from '../components/Header'
+import Footer from '../components/Footer'
+import { metadata } from '../layout'
+import './style.css'
 
-const Sobre = () => {
+export default function Sobre() {
     metadata.title = 'Sobre'
     return (
-        <main className="flex min-h-screen flex-row justify-start">
-            <SideBar />
-            <div className='mainContainer border-l'>
-                <Header />
-                <AboutContent />
+        <div>
+            <div className="flex min-h-screen flex-row justify-start">
+                <SideBar />
+                <div className='mainContainer border-l'>
+                    <Header page_index={1} />
+                    <AboutContent />
+                </div>
             </div>
-        </main>
+            <footer>
+                <Footer />
+            </footer>
+        </div>
     )
 }
-
-export default Sobre
