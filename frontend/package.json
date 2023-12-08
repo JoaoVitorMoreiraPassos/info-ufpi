@@ -19,9 +19,11 @@
     "@mui/material": "^5.14.17",
     "@mui/styled-engine-sc": "^6.0.0-alpha.5",
     "axios": "^1.6.1",
+    "date-fns-tz": "^2.0.0",
     "next": "14.0.2",
     "react": "^18",
     "react-dom": "^18",
+    "react-helmet": "^6.1.0",
     "styled-components": "^6.1.1"
   },
   "devDependencies": {
