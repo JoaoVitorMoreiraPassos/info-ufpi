@@ -1,30 +1,40 @@
-'use client'
-import React from 'react'
-import './style.css'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEye } from '@fortawesome/free-solid-svg-icons'
+import React from 'react';
+import './style.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
-const PasswordInput = () => {
-
-  const switch_password_visibility = () => {
-    const eyeIcon = document.getElementById('eyeIcon') as HTMLElement;
-    const passwordInput = document.getElementById('passwordInput') as HTMLInputElement;
-    if (passwordInput === null) {
-      return;
-    }
-    if (passwordInput.getAttribute('type') == 'password') {
-      passwordInput.setAttribute('type', 'text');
-    }
-  }
-
-  return (
-    <div className='passwordContainer flex flex-row w-full'>
-      <input id="passwordInput" type="password" name="password" className=' w-1/1.5 bg-transparent outline-none h-14 passwordInput' placeholder='senha' />
-      <i className='flex items-center justify-center cursor-pointer'>
-        <FontAwesomeIcon icon={faEye} id='eyeIcon' className=' p-4 w-full' onClick={switch_password_visibility} />
-      </i>
-    </div>
-  )
+interface PasswordInputProps {
+  value: string;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  error?: string;
 }
 
-export default PasswordInput
+const PasswordInput: React.FC<PasswordInputProps> = ({ value, onChange, error }) => {
+  const switchPasswordVisibility = () => {
+    const passwordInput = document.getElementById('passwordInput') as HTMLInputElement;
+
+    if (passwordInput) {
+      const currentType = passwordInput.getAttribute('type');
+      passwordInput.setAttribute('type', currentType === 'password' ? 'text' : 'password');
+    }
+  };
+
+  return (
+    <div className={`passwordContainer flex flex-row w-full ${error ? 'border-red-500' : ''}`}>
+      <input
+        id="passwordInput"
+        type="password"
+        name="password"
+        value={value}
+        onChange={onChange}
+        className={`w-1/1.5 bg-transparent outline-none h-14 passwordInput ${error ? 'border-red-500' : ''}`}
+        placeholder="Senha"
+      />
+      <i className="flex items-center justify-center cursor-pointer">
+        <FontAwesomeIcon icon={faEye} id="eyeIcon" className="p-4 w-full" onClick={switchPasswordVisibility} />
+      </i>
+    </div>
+  );
+};
+
+export default PasswordInput;

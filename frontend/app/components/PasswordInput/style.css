@@ -4,6 +4,10 @@
   background: transparent;
 }
 
+/* #passwordInput::placeholder {
+  color: #111;
+} */
+
 .passwordContainer {
   background: #4656613D;
   border: .5px solid #999;

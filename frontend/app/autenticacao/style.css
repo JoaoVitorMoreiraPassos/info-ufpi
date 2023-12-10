@@ -1,16 +1,20 @@
-main{
-    background: #F1F1F1;
-
+* {
+    padding: 0;
+    margin: 0
 }
 
-.loginCardContainer{
+main {
+    background: #F1F1F1;
+}
+
+.loginCardContainer {
     box-shadow: 0px 4px 4px 0px #00000040;
     min-width: 415px;
     width: 415px;
     background: #FFFFFF;
 }
 
-input{
+input {
     width: 100%;
     background: #4656613D;
     padding: 10px;
@@ -18,12 +22,12 @@ input{
     transition: all 300ms ease-in-out;
 }
 
-input:not([name="password"]){
+input:not([name="password"]) {
     border: 1px solid #999;
     outline: none;
 }
 
-input:not([name="password"]):focus{
+input:not([name="password"]):focus {
     border: 1px solid rgb(59 130 246 / 0.5);
     background: #FFFFFF;
 }

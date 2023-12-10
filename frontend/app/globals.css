@@ -69,3 +69,18 @@ textarea:focus {
   border: .5px solid rgb(59 130 246 / 0.5);
   background: #FFFFFF;
 }
+
+.navHighlighted {
+  font-size: 1.5rem;
+  opacity: 1;
+}
+
+@media screen and (max-width: 1024px) {
+  main {
+    margin-top: 6rem;
+  }
+
+  .mainContainer {
+    border-left: 0;
+  }
+}

@@ -6,11 +6,11 @@ import './style.css'
 
 const inter = Inter({ subsets: ['latin'] })
 
-const HomeContent = () => {
+export default function HomeContent() {
     const em_alta = [
-        { "title": "Restaurante", "image": "/ru imagem.png", "id": 1 },
-        { "title": "Biblioteca", "image": "/livros.png", "id": 2 },
-        { "title": "Núcleo de assistencia estudantil", "image": "/nae.png", "id": 3 },
+        { "id": 1, "title": "Restaurante", "image": "/ru imagem.png", },
+        { "id": 2, "title": "Biblioteca", "image": "/livros.png", },
+        { "id": 3, "title": "Núcleo de assistencia estudantil", "image": "/nae.png", },
     ]
     const recent_notices = [
         "Novo formato para a recepção de calouros e acolhimento aos alunos no Campus",
@@ -25,13 +25,17 @@ const HomeContent = () => {
                     <h1 className={' pb-4 text-xl ' + inter.className}>Em alta</h1>
                 </div>
                 <div className='flex gap-8 carousel'>
-                    {em_alta.map((noticia, index) => {
-                        return (
-                            <li key={"fire_card" + index}>
-                                <NoticeCard noticia={noticia} />
-                            </li>
-                        )
-                    })}
+                    <ul className='flex gap-8 carousel' >
+                        {
+                            em_alta.length > 0 && em_alta.map((noticia, index) => {
+                                return (
+                                    <li key={"fire_card" + index}>
+                                        <NoticeCard noticia={noticia} key={"fire_card" + index} />
+                                    </li>
+                                )
+                            })
+                        }
+                    </ul>
                 </div>
             </div>
 
@@ -44,10 +48,10 @@ const HomeContent = () => {
                 <div className='flex-column h-auto'>
                     <ul>
                         {
-                            recent_notices.map((notice, index) => {
+                            recent_notices.length > 0 && recent_notices.map((notice, index) => {
                                 return (
                                     <li key={"recent_card_" + index}>
-                                        <RecentNotice description={notice} />
+                                        <RecentNotice description={notice} key={"recent_card_" + index} />
                                     </li>
                                 )
                             })
@@ -55,8 +59,7 @@ const HomeContent = () => {
                     </ul>
                 </div>
             </div>
-        </div >
+        </div>
     )
 }
 
-export default HomeContent

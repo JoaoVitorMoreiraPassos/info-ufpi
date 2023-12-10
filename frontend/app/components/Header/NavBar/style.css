@@ -14,14 +14,14 @@ img {
     height: 100%;
 }
 
-.homeLink {
-    font-weight: 700;
-}
-
 .navPages div:not(.hamburguerMenu) {
     height: 3.5rem;
 }
 
 .hamburguerMenu {
+    transition: all 0.5s ease;
+}
+
+.navPageOption {
     transition: all 0.5s ease;
 }
