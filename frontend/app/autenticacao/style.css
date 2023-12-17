@@ -8,10 +8,11 @@ main {
 }
 
 .loginCardContainer {
-    box-shadow: 0px 4px 4px 0px #00000040;
+    box-shadow: 0px 0px 5px 8px rgba(20, 117, 208, 0.2);
     min-width: 415px;
     width: 415px;
     background: #FFFFFF;
+    border-radius: 1.61803398875rem;
 }
 
 input {

@@ -34,7 +34,7 @@ const NavBar = ({ page_index: page_index }: { page_index: undefined | Number }) 
         <>
 
             {
-                screenWidth > 1024 && (
+                screenWidth >= 1024 ? (
 
                     <div className='flex navPages items-center mx-6 overflow-hidden'>
                         <div className='hamburguerMenu hidden'>
@@ -69,32 +69,30 @@ const NavBar = ({ page_index: page_index }: { page_index: undefined | Number }) 
                             })
                         }
                     </div>
-                )
-            }
-            {
-                screenWidth <= 1024 && (
-                    <div className='flex navPages  justify-center items-center mx-6 overflow-hidden'>
-                        <div className='hamburguerMenu flex justify-center items-center absolute'>
-                            <button onClick={() => {
-                                const sideBar = document.querySelector('.sideBar');
-                                const hamburguerMenu = document.querySelector('.hamburguerMenu');
-                                if (sideBar) {
-                                    sideBar.classList.remove('close');
-                                    sideBar.classList.add('open');
-                                    sideBar.classList.remove('hidden');
-                                };
-                                setTimeout(() => {
-                                    if (hamburguerMenu) {
-                                        hamburguerMenu.classList.add('hidden');
-                                        hamburguerMenu.classList.remove('flex');
+                ) :
+                    (
+                        <div className='flex navPages  justify-center items-center mx-6 overflow-hidden'>
+                            <div className='hamburguerMenu flex justify-center items-center absolute'>
+                                <button onClick={() => {
+                                    const sideBar = document.querySelector('.sideBar');
+                                    const hamburguerMenu = document.querySelector('.hamburguerMenu');
+                                    if (sideBar) {
+                                        sideBar.classList.remove('close');
+                                        sideBar.classList.add('open');
+                                        sideBar.classList.remove('hidden');
                                     };
-                                }, 300);
-                            }}>
-                                <i><FontAwesomeIcon icon={faBars} /></i>
-                            </button>
+                                    setTimeout(() => {
+                                        if (hamburguerMenu) {
+                                            hamburguerMenu.classList.add('hidden');
+                                            hamburguerMenu.classList.remove('flex');
+                                        };
+                                    }, 300);
+                                }}>
+                                    <i><FontAwesomeIcon icon={faBars} /></i>
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                )
+                    )
             }
         </>
     )

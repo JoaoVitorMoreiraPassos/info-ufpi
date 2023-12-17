@@ -1,0 +1,11 @@
+@media screen and (max-width: 768px) {
+    .aboutImage {
+        width: 100%;
+    }
+
+    .aboutContainer {
+        font-size: .5rem;
+        padding: 1rem;
+        margin: 0
+    }
+}

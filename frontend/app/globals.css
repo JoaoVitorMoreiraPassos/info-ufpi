@@ -75,6 +75,24 @@ textarea:focus {
   opacity: 1;
 }
 
+.error {
+  animation: inputError 1s ease-in-out infinite;
+}
+
+@keyframes inputError {
+  0% {
+    border: 1px solid #999;
+  }
+
+  50% {
+    border: 1px solid red;
+  }
+
+  100% {
+    border: 1px solid #999;
+  }
+}
+
 @media screen and (max-width: 1024px) {
   main {
     margin-top: 6rem;

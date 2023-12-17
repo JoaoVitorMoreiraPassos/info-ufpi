@@ -25,6 +25,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-br" data-theme="light">
+      <head>
+        {/* Adicione a tag link para o ícone do título da página */}
+        <link rel="icon" href="/logo.png" />
+      </head>
       <body className={inter.className}>
         {children}
       </body>

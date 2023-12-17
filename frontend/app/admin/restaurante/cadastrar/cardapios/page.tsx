@@ -65,7 +65,7 @@ export default function CadastrarCardapio() {
                 <SideBar />
                 <div className='mainContainer border-l'>
                     <Header page_index={-1} />
-                    <main className='flex-row flex p-14 justify-center gap-2'>
+                    <main className='flex-row flex p-14 justify-center gap-10 flex-wrap'>
                         <RecipeItemRegister items={alreadyRegister.filter((item) => item.type === 'normal-recipe')} title='Cadastrar Refeição' />
 
                         <RecipeItemRegister items={alreadyRegister.filter((item) => item.type === 'veg-recipe')} title='Cadastrar Refeição Vegetariana' />
