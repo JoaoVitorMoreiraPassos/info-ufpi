@@ -27,15 +27,15 @@ li img {
 
 .close,
 .open {
-    transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in;
 }
 
 .close {
-    animation: close 0.3s ease-in-out forwards;
+    animation: close 0.3s ease-in forwards;
 }
 
 .open {
-    animation: open 0.3s ease-in-out forwards;
+    animation: open 0.3s ease-in forwards;
 
 }
 

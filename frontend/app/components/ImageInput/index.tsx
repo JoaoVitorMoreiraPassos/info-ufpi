@@ -1,9 +1,16 @@
 'use client'
 import React from 'react'
+import { useState, useEffect } from 'react'
+
 
 const ImageInput = () => {
+
+
+
+
+
     return (
-        <div className="flex flex-col w-1/2 gap-4 items-end">
+        <div className="flex flex-col w-96 gap-4 justify-end items-start h-full">
             <p className=' w-full text-left'>Imagem</p>
             <label htmlFor="image" className="drop-container h-full w-full flex justify-center items-center" id="dropcontainer"
                 onDragOver={
@@ -35,10 +42,14 @@ const ImageInput = () => {
                     if (fileInput) {
                         fileInput.files = e.dataTransfer.files
                     }
-                }}>
+
+                }}
+
+            >
                 <span className="drop-title">Arraste a Image aqui<br /></span>
                 ou
-                <input type="file" name="image" id="image" className=' w-full flex justify-center items-center text-center' placeholder='Arrate uma imagem até aqui' />
+                <input type="file" name="image" id="image" className=' w-full flex justify-center items-center text-center' placeholder='Arrate uma imagem até aqui'
+                />
 
             </label>
         </div>

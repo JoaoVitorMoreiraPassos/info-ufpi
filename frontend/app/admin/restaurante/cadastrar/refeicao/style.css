@@ -9,6 +9,7 @@ select {
 
 input[type="date"] {
     background: #4985ada9;
+    padding: 0;
 }
 
 input[type="text"]::placeholder {

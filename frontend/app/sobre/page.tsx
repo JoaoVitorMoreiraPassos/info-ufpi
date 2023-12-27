@@ -14,7 +14,9 @@ export default function Sobre() {
                 <SideBar />
                 <div className='mainContainer border-l'>
                     <Header page_index={1} />
-                    <AboutContent />
+                    <main>
+                        <AboutContent />
+                    </main>
                 </div>
             </div>
             <footer>

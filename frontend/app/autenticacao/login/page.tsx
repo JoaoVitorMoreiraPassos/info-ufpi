@@ -21,7 +21,7 @@ export default function Login() {
                             Cadastre-se aqui.
                         </Link>
                     </p>
-                    <Link href="" className='text-cyan-600'>Esqueceu sua senha?</Link>
+                    <Link href="/autenticacao/recuperar" className='text-cyan-600'>Esqueceu sua senha?</Link>
                 </div>
             </div>
         </div>
