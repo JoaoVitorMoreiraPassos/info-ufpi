@@ -20,6 +20,7 @@
     "@mui/styled-engine-sc": "^6.0.0-alpha.5",
     "axios": "^1.6.1",
     "date-fns-tz": "^2.0.0",
+    "moment": "^2.29.4",
     "next": "14.0.2",
     "react": "^18",
     "react-dom": "^18",
