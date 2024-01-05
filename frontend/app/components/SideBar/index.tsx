@@ -9,7 +9,6 @@ import Link from 'next/link'
 import { useState } from 'react';
 
 const inria_serif = Inria_Serif({ weight: "700", subsets: ['latin'], })
-
 const SideBar = () => {
     const menu_options = [
         {
@@ -75,7 +74,6 @@ const SideBar = () => {
         if (sideBar) {
             sideBar.classList.add('close');
             sideBar.classList.remove('open');
-            document.querySelector('.mainContainer')?.classList.add('border-l');
         };
         if (hamburguerMenu) {
             hamburguerMenu.classList.remove('hidden');
@@ -84,58 +82,42 @@ const SideBar = () => {
         };
     }
 
-    const [screenWidth, setScreenWidth] = useState<number>(0);
-    const [screenHeight, setScreenHeight] = useState<number>(0);
-
-    React.useEffect(() => {
-        setScreenWidth(window.innerWidth);
-        setScreenHeight(window.innerHeight);
-    }, []);
-
-    React.useEffect(() => {
-        window.addEventListener("resize", () => {
-            setScreenWidth(window.innerWidth);
-            setScreenHeight(window.innerHeight);
-        });
-    }, []);
 
     return (
 
-
         <>
-            {
+            <div className={`sideBar relative flex-col justify-start hidden ${inria_serif.className}`}>
+                <ul>
+                    <li className='flex justify-end h-16' key='side_menu_closer'>
+                        <div className='flex justify-end'>
+                            <button className='flex items-center justify-end w-100 h-100 p-6' onClick={openCloseSideBar}>
+                                <FontAwesomeIcon icon={faArrowLeft} />
+                            </button>
+                        </div>
+                    </li>
+                    {
+                        menu_options.map((option, index) => {
+                            return (
+                                <li key={"side_menu_option_" + option.id} className=' border-t flex gap-1 items-center h-14'>
+                                    <Link href="#" className='py-3'>
+                                        <i className='px-3 w-10'>
+                                            {option.icon}
+                                        </i>
+                                        <span className='w-100'>
+                                            {option.name}
+                                        </span>
+                                    </Link>
+                                </li>
+                            )
+                        })
+                    }
+                    <li className='flex gap-1 items-center border-t' key='side_menu_logo'>
+                        <Image src="/logo.png" alt="Logo" width={241} height={202.24} className='w-100 h-100 mix-blend-difference' />
+                    </li>
+                </ul>
+            </div >
+            {/* {
                 screenWidth > 1024 ? (
-                    <div className={`sideBar relative flex-col justify-start ${inria_serif.className}`}>
-
-                        <ul>
-                            <li className='flex justify-end h-16' key='side_menu_closer'>
-                                <div className='flex justify-end'>
-                                    <button className='flex items-center justify-end w-100 h-100 p-6' onClick={openCloseSideBar}>
-                                        <FontAwesomeIcon icon={faArrowLeft} />
-                                    </button>
-                                </div>
-                            </li>
-                            {
-                                menu_options.map((option, index) => {
-                                    return (
-                                        <li key={"side_menu_option_" + option.id} className=' border-t flex gap-1 items-center h-14'>
-                                            <Link href="#" className='py-3'>
-                                                <i className='px-3 w-10'>
-                                                    {option.icon}
-                                                </i>
-                                                <span className='w-100'>
-                                                    {option.name}
-                                                </span>
-                                            </Link>
-                                        </li>
-                                    )
-                                })
-                            }
-                            <li className='flex gap-1 items-center border-t' key='side_menu_logo'>
-                                <Image src="/logo.png" alt="Logo" width={241} height={202.24} className='w-100 h-100 mix-blend-difference' />
-                            </li>
-                        </ul>
-                    </div >
                 )
                     : (
                         <div className={`sideBar relative flex-col justify-start ${inria_serif.className} hidden bg-white`}>
@@ -169,7 +151,7 @@ const SideBar = () => {
                             </ul>
                         </div >
                     )
-            }
+            } */}
         </>
     )
 }

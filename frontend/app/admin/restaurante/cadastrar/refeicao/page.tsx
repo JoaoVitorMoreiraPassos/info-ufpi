@@ -83,7 +83,7 @@ export default function CadastrarRefeicao() {
         <div>
             <div className="flex flex-row justify-start" >
                 <SideBar />
-                <div className='mainContainer border-l w-full'>
+                <div className='mainContainer w-full'>
                     <Header page_index={-1} />
                     <main className=''>
                         <MealFormsContainer regular_recipes={regular_recipes} veg_recipes={veg_recipes} follow_ups={follow_ups} />

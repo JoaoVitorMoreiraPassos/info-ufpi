@@ -14,26 +14,61 @@ const NavBar = ({ page_index: page_index }: { page_index: undefined | Number }) 
     ];
 
     const [screenWidth, setScreenWidth] = useState<number>(0);
-    const [screenHeight, setScreenHeight] = useState<number>(0);
-
     React.useEffect(() => {
         setScreenWidth(window.innerWidth);
-        setScreenHeight(window.innerHeight);
-    }, []);
-
-    React.useEffect(() => {
         window.addEventListener("resize", () => {
             setScreenWidth(window.innerWidth);
-            setScreenHeight(window.innerHeight);
         });
-    }, []);
+    }, [screenWidth]);
 
 
     return (
 
         <>
+            <div className='flex navPages items-center mx-6 overflow-hidden'>
+                <div className='hamburguerMenu'>
+                    <button onClick={() => {
 
-            {
+                        const sideBar = document.querySelector('.sideBar');
+                        const hamburguerMenu = document.querySelector('.hamburguerMenu');
+                        const mainContainer = document.querySelector('.mainContainer');
+                        console.log(sideBar + ' ' + hamburguerMenu);
+                        if (sideBar) {
+                            sideBar.classList.add('open');
+                            sideBar.classList.remove('hidden');
+                            console.log(mainContainer?.classList);
+                            if (mainContainer?.classList) {
+                                mainContainer.classList.add('border-l');
+                            }
+                            console.log(mainContainer?.classList);
+                        };
+                        if (hamburguerMenu) {
+                            hamburguerMenu.classList.add('hidden');
+                            hamburguerMenu.classList.remove('flex');
+                        };
+                        console.log('click')
+                    }}>
+                        <i><FontAwesomeIcon icon={faBars} /></i>
+                    </button>
+                </div>
+                <div className='pages w-full flex flex-row'>
+                    {
+                        menu_options.map((option, index) => {
+                            const class_name = 'opacity-70 px-6 py-3 hover:opacity-100 transition duration-300 ease-in-out ' + option[2];
+                            return (
+                                <div key={"nav_menu_option_" + index} className='flex gap-1 items-center'>
+                                    <Link href={option[1]} className={"navPageOption " + class_name}>
+                                        {option[0]}
+                                    </Link>
+                                </div>
+                            )
+                        })
+                    }
+
+                </div>
+            </div>
+
+            {/* {
                 screenWidth >= 1024 ? (
 
                     <div className='flex navPages items-center mx-6 overflow-hidden'>
@@ -93,7 +128,7 @@ const NavBar = ({ page_index: page_index }: { page_index: undefined | Number }) 
                             </div>
                         </div>
                     )
-            }
+            } */}
         </>
     )
 }

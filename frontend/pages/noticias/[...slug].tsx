@@ -24,7 +24,7 @@ export default function Notice() {
         <div data-theme='light' className={inria_serif.className}>
             <div className="flex min-h-screen flex-row justify-start">
                 <SideBar />
-                <div className='mainContainer border-l'>
+                <div className='mainContainer'>
                     <Header page_index={0} />
                     <main>
                         <NoticeContent slug={slug as string} />

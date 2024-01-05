@@ -19,9 +19,37 @@ img {
 }
 
 .hamburguerMenu {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     transition: all 0.5s ease;
 }
 
 .navPageOption {
     transition: all 0.5s ease;
+}
+
+@media screen and (max-width: 1024px) {
+
+    .navPages {
+        justify-content: center;
+    }
+
+    .hamburguerMenu {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+    }
+
+    .pages {
+        display: none;
+    }
+
+    .hamburguerMenu {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+    }
 }
