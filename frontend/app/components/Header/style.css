@@ -1,0 +1,7 @@
+@media screen and (max-width: 1024) {
+    .navContainer {
+        display: fixed;
+        top: 0;
+        z-index: 50;
+    }
+}

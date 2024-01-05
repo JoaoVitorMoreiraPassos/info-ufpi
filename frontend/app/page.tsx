@@ -8,12 +8,12 @@ import '@/app/globals.css'
 import '@/app/style.css'
 
 export default function Home() {
-  metadata.title = 'Home'
+  metadata.title = 'Página Inicialn'
   return (
     <div>
       <div className="flex min-h-screen flex-row justify-start">
         <SideBar />
-        <div className='mainContainer border-l'>
+        <div className='mainContainer'>
           <Header page_index={0} />
           <main>
             <HomeContent />

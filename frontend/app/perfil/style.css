@@ -1,0 +1,23 @@
+.mainContainer {
+    border-left: 1px solid #e6e6e6;
+}
+
+.bannerContent {
+    align-items: start;
+}
+
+@media screen and (max-width: 1024px) {
+    .mainContainer {
+        border-left: none;
+        margin-top: 0;
+        /* margin-top: 2.5rem; */
+    }
+
+    main {
+        margin-top: 0;
+    }
+
+    .bannerContent {
+        align-items: center;
+    }
+}

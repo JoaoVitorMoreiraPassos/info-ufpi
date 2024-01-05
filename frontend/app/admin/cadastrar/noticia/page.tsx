@@ -16,7 +16,7 @@ const CadastrarNoticia = () => {
         <div>
             <div className="flex flex-row justify-start" >
                 <SideBar />
-                <div className='mainContainer border-l'>
+                <div className='mainContainer'>
                     <Header page_index={-1} />
                     <main>
                         <NoticeForm />

@@ -63,7 +63,7 @@ export default function CadastrarCardapio() {
         <div>
             <div className="flex flex-row justify-start" >
                 <SideBar />
-                <div className='mainContainer border-l'>
+                <div className='mainContainer'>
                     <Header page_index={-1} />
                     <main className='flex-row flex p-14 justify-center gap-10 flex-wrap'>
                         <RecipeItemRegister items={alreadyRegister.filter((item) => item.type === 'normal-recipe')} title='Cadastrar Refeição' />

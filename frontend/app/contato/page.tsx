@@ -9,7 +9,7 @@ const Contato = () => {
         <div>
             <div className="flex min-h-screen flex-row justify-start">
                 <SideBar />
-                <div className='mainContainer border-l'>
+                <div className='mainContainer'>
                     <Header page_index={1} />
                     <main className='h-full'>
                         <ContactContent />

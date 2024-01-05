@@ -21,7 +21,7 @@ const Perfil = () => {
         <div>
             <div className="flex flex-row justify-start" >
                 <SideBar />
-                <div className='mainContainer border-l'>
+                <div className='mainContainer'>
                     <Header page_index={-1} />
                     <main className='cardsContainer flex w-full flex-row flex-wrap p-14 justify-center items-start gap-10'>
                         <p className='text-3xl text-left text-black font-bold w-full'>

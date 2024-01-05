@@ -6,7 +6,17 @@ import { format } from 'date-fns-tz';
 import 'moment/locale/pt-br';
 import moment from 'moment';
 import './style.css';
-autor_image: string;
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
+
+interface Noticia {
+    titulo: string;
+    descricao: string;
+    image: string;
+    data: string;
+    autor: string;
+    categoria: string;
+    autor_image: string;
 }
 
 const NoticeContent = ({ slug }: { slug: string }) => {

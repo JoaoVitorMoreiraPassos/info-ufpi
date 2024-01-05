@@ -1,0 +1,26 @@
+.profile {
+    display: flex;
+}
+
+.profileMob {
+    display: none;
+}
+
+@media screen and (max-width: 1024px) {
+    .profileMob {
+        display: flex;
+    }
+
+
+    .profileMob div a {
+        height: 100%;
+    }
+
+    .profileMob img {
+        height: 100%;
+    }
+
+    .profile {
+        display: none;
+    }
+}
