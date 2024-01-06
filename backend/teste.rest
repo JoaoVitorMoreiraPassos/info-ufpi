@@ -1,0 +1,19 @@
+POST http://127.0.0.1:8000/cadastrar/ 
+Content-Type: application/json
+
+{ "username": "dayan1", "password": "dayan153", "email": "dayanramos5537@mail.com" }
+
+###
+
+POST http://127.0.0.1:8000/login/ 
+Content-Type: application/json
+
+{ "username": "dayan", "password": "dayan" }
+
+###
+
+GET http://127.0.0.1:8000/teste_token/ 
+Content-Type: application/json 
+Authorization: Token 3cd3222affba9e34c7656e70b788c70e2d0c3753
+
+{}

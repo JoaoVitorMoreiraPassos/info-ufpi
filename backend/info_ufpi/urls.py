@@ -15,8 +15,15 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, re_path, include
+from . import views
 
 urlpatterns = [
+    re_path("login/", views.login),
+    re_path("cadastrar/", views.cadastrar),
+    re_path("teste_token/", views.teste_token),
     path("admin/", admin.site.urls),
+
+    path("auth/", include("rest_framework.urls")),
+    # A rota de logout é http://localhost:8000/auth/logout/
 ]
