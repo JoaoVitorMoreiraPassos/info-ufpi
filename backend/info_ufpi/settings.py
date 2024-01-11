@@ -43,8 +43,8 @@ INSTALLED_APPS = [
     "django_filters",
     "corsheaders",
     # Local apps
-    "setores",
     "posts",
+    "refeicao"
 ]
 
 MIDDLEWARE = [

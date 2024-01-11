@@ -26,7 +26,6 @@ class PostSerializer(serializers.ModelSerializer):
             'titulo_post',
             'autor_post',
             'conteudo_post',
-            'setor_post',
             'imagem_post',
             'criacao',
             'ativo',

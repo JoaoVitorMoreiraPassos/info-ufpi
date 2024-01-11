@@ -1,5 +1,4 @@
 from django.db import models
-from setores.models import Setor
 from django.contrib.auth.models import User
 from PIL import Image
 # from django.conf import settings
@@ -19,9 +18,8 @@ class Post(Base):
     autor_post = models.ForeignKey(
         User, on_delete=models.DO_NOTHING, verbose_name='Autor')
     conteudo_post = models.TextField(verbose_name='Conteudo')
-    setor_post = models.ForeignKey(
-        Setor, related_name='posts', on_delete=models.DO_NOTHING, blank=True, null=True, verbose_name='Setor')
-    imagem_post = models.ImageField(upload_to='post_img/%Y/%m/%d', blank=True, null=True, verbose_name='Imagem')
+    imagem_post = models.ImageField(
+        upload_to='post_img/%Y/%m/%d', blank=True, null=True, verbose_name='Imagem')
 
     class Meta:
         verbose_name = 'Post'
