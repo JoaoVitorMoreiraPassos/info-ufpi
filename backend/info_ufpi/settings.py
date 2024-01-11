@@ -138,9 +138,9 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticatedOrReadOnly', # Permite acesso apenas para usuários autenticados
-    )
-    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination', # Paginação
-    # 'PAGE_SIZE': 2, # Quantidade de registros por página
+    ),
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination', # Paginação
+    'PAGE_SIZE': 2 # Quantidade de registros por página
     # 'DEFAULT_THROTTLE_CLASSES': (
     #     'rest_framework.throttling.AnonRateThrottle', # Limite de requisições anônimas
     #     'rest_framework.throttling.UserRateThrottle', # Limite de requisições por usuário
