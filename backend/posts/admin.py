@@ -4,11 +4,10 @@ from .models import Post, Comentario, Favorito
 
 
 class PostAdmin(admin.ModelAdmin):
-    list_display = ('id', 'titulo_post', 'autor_post', 'setor_post', 'ativo')
+    list_display = ('id', 'titulo_post', 'autor_post', 'ativo')
     list_display_links = ('id', 'titulo_post')
-    search_fields = ('titulo_post', 'autor_post__username',
-                     'setor_post__nome_setor')
-    list_filter = ('autor_post', 'setor_post', 'ativo')
+    search_fields = ('titulo_post', 'autor_post__username')
+    list_filter = ('autor_post', 'ativo')
     list_editable = ('ativo',)
     list_per_page = 10
 
