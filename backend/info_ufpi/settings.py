@@ -43,8 +43,7 @@ INSTALLED_APPS = [
     "django_filters",
     "corsheaders",
     # Local apps
-    "categorias",
-    "comentarios",
+    "setores",
     "posts",
 ]
 
@@ -130,6 +129,27 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 
 MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / "media"
+
+# Django REST Framework
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication', # Autenticação por sessão
+        'rest_framework.authentication.TokenAuthentication', # Autenticação por token
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly', # Permite acesso apenas para usuários autenticados
+    )
+    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination', # Paginação
+    # 'PAGE_SIZE': 2, # Quantidade de registros por página
+    # 'DEFAULT_THROTTLE_CLASSES': (
+    #     'rest_framework.throttling.AnonRateThrottle', # Limite de requisições anônimas
+    #     'rest_framework.throttling.UserRateThrottle', # Limite de requisições por usuário
+    # ),
+    # 'DEFAULT_THROTTLE_RATES': {
+    #     'anon': '5/minute', # 5 requisições por minuto para usuários anônimos
+    #     'user': '10/minute', # 10 requisições por minuto para usuários autenticados
+    # }
+}
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
