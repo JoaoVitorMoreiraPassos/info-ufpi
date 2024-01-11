@@ -9,6 +9,7 @@ const RegisterForm = () => {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [usernameError, setUsernameError] = useState('');
     const [passwordError, setPasswordError] = useState('');
@@ -34,7 +35,11 @@ const RegisterForm = () => {
             toast.warning('Por favor, insira seu e-mail ou telefone.');
             flag = false;
         }
-
+        if (!email) {
+            document.getElementById('email')?.focus();
+            toast.warning('Por favor, insira seu e-mail.');
+            flag = false;
+        }
         if (!password) {
             document.getElementById('passwordInput')?.focus();
             toast.warning('Por favor, insira sua senha.')
@@ -49,22 +54,28 @@ const RegisterForm = () => {
         if (isValid()) {
 
             const data = {
-                firstName,
-                lastName,
-                username,
-                password
+                "first_name": firstName,
+                "last_name": lastName,
+                "username": username,
+                "email": email,
+                "password": password
             }
 
             await axios.post('http://localhost:8000/cadastrar/', data)
                 .then((response) => {
-                    if (response.status === 200) {
-                        const token = response.data.token
-                        localStorage.setItem('token', token)
-                        window.location.href = '/'
+                    if (response.status === 201) {
+                        toast.success("Usuário cadastrado com sucesso!")
+                        const token = response.data.token;
+                        const user = response.data.user;
+                        localStorage.setItem('token', token);
+                        localStorage.setItem('user', JSON.stringify(user));
+                        window.location.href = '/';
                     }
                 })
                 .catch((error) => {
-                    toast.error(error.response.data.message);
+                    if (error.response.status == 400) {
+                        toast.error("Erro ao cadastrar usuário!");
+                    }
                 })
         }
     }
@@ -102,6 +113,16 @@ const RegisterForm = () => {
                 placeholder="E-mail ou telefone"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
+            />
+
+            <input
+                className={`rounded-lg ${usernameError ? 'border-red-500' : ''}`}
+                type="email"
+                name="email"
+                id="email"
+                placeholder="E-mail ou telefone"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
             />
 
             <PasswordInput

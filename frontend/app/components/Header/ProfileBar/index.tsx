@@ -11,14 +11,30 @@ interface window {
   innerWidth: number;
   innerHeight: number;
 }
-
+type user = {
+  first_name: string;
+  last_name: string;
+}
 const ProfileBar = () => {
+  const [user, setUser] = useState<user>();
+  useEffect(() => {
+    setUser(JSON.parse(localStorage.getItem('user') || '{}'));
+  }, [])
   return (
     <>
-
-
       <div className=' profile items-center justify-center overflow-hidden'>
-        <Link href="/autenticacao/login" className='items-center justify-center mx-6'>Entrar/Cadastar</Link>
+        {user ? (
+          <Link href="/perfil" className='items-center justify-center mx-6'>
+            <div className='flex items-center justify-center'>
+              {/* Mudar rota da foto de perfil */}
+              <Image src={""} alt={user.first_name} width={50} height={50} />
+            </div>
+          </Link>
+        ) : (
+          <Link href="/autenticacao/login" className='items-center justify-center mx-6'>{
+            'Entrar/Cadastrar'
+          }</Link>
+        )}
       </div>
 
       <div className='profileMob flex-row justify-center items-center w-full h-16 rounded-xl relative'>

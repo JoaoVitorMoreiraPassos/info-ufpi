@@ -45,12 +45,12 @@ const LoginForm = () => {
             await axios.post('http://localhost:8000/login/', data)
                 .then((response) => {
                     if (response.status == 200) {
-                        const token = response.data.token
-                        localStorage.setItem('token', token)
-
-                        toast.success('Login realizado com sucesso!')
+                        const token = response.data.token;
+                        localStorage.setItem('token', token);
+                        localStorage.setItem('user', JSON.stringify(response.data.user));
+                        toast.success('Login realizado com sucesso!');
                         setTimeout(() => {
-                            window.location.href = '/'
+                            window.location.href = '/';
                         }, 1000)
                     }
 
@@ -59,6 +59,7 @@ const LoginForm = () => {
                     toast.error(error.response?.data?.message ? error.response.data.message : 'Usuário não encontrado!')
                 })
         }
+
     }
 
     return (

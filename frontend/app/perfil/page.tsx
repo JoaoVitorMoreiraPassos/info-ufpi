@@ -5,10 +5,13 @@ import SideBar from '../components/SideBar';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import './style.css'
 
+
 const Perfil = () => {
+
     const profile = {
         "name": "Restaurante Universitário",
         "bio": "O Restaurante Universitário (RU) é um órgão suplementar da Universidade Federal do Ceará, vinculado à Pró-Reitoria de Assuntos Estudantis (PRAE).",
@@ -22,7 +25,6 @@ const Perfil = () => {
         "description": "O RU estará fechado hoje, 12/09, devido a um problema na cozinha.",
         "author_image": "/ru/ru perfil.png",
         "recipe_image": "/ru/image 1.png"
-
     }
     let noticias = [favoritos, favoritos]
 
