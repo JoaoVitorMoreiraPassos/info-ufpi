@@ -1,53 +1,77 @@
 'use client';
 import React, { useState } from 'react';
 import PasswordInput from '@/app/components/PasswordInput';
+import { toast, ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
+import axios from 'axios';
 
 const RegisterForm = () => {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [firstNameError, setFirstNameError] = useState('');
-    const [lastNameError, setLastNameError] = useState('');
     const [usernameError, setUsernameError] = useState('');
     const [passwordError, setPasswordError] = useState('');
 
-    const handleSubmit = (event: React.FormEvent<HTMLButtonElement>) => {
-        event.preventDefault();
-
-        // Limpar mensagens de erro
-        setFirstNameError('');
-        setLastNameError('');
-        setUsernameError('');
-        setPasswordError('');
+    const isValid = () => {
+        let flag = true;
 
         // Validar campos
         if (!firstName) {
-            setFirstNameError('Por favor, insira seu primeiro nome.');
-            return;
+            document.getElementById('first_name')?.focus();
+            toast.warning('Por favor, insira seu primeiro nome.');
+            flag = false;
         }
 
         if (!lastName) {
-            setLastNameError('Por favor, insira seu sobrenome.');
-            return;
+            document.getElementById('last_name')?.focus();
+            toast.warning('Por favor, insira seu sobrenome.');
+            flag = false;
         }
 
         if (!username) {
-            setUsernameError('Por favor, insira seu e-mail ou telefone.');
-            return;
+            document.getElementById('username')?.focus();
+            toast.warning('Por favor, insira seu e-mail ou telefone.');
+            flag = false;
         }
 
         if (!password) {
-            setPasswordError('Por favor, insira sua senha.');
-            return;
+            document.getElementById('passwordInput')?.focus();
+            toast.warning('Por favor, insira sua senha.')
+            flag = false;
         }
-
-        // Se chegou até aqui, os campos estão preenchidos corretamente
-        console.log(firstName, lastName, username, password);
+        return flag;
     };
 
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+
+        if (isValid()) {
+
+            const data = {
+                firstName,
+                lastName,
+                username,
+                password
+            }
+
+            await axios.post('http://localhost:8000/cadastrar/', data)
+                .then((response) => {
+                    if (response.status === 200) {
+                        const token = response.data.token
+                        localStorage.setItem('token', token)
+                        window.location.href = '/'
+                    }
+                })
+                .catch((error) => {
+                    toast.error(error.response.data.message);
+                })
+        }
+    }
+
     return (
-        <form action="post" className="flex flex-col p-6 gap-6 w-1/1 items-center">
+        <form onSubmit={handleSubmit} className="flex flex-col p-6 gap-6 w-1/1 items-center">
+            <ToastContainer />
             <div className="flex flex-row gap-1 justify-between w-full">
                 <input
                     className={`rounded-lg ${usernameError ? 'border-red-500' : ''}`}
@@ -69,8 +93,6 @@ const RegisterForm = () => {
                     onChange={(e) => setLastName(e.target.value)}
                 />
             </div>
-            {firstNameError && <p className="text-red-500">{firstNameError}</p>}
-            {lastNameError && <p className="text-red-500">{lastNameError}</p>}
 
             <input
                 className={`rounded-lg ${usernameError ? 'border-red-500' : ''}`}
@@ -82,20 +104,15 @@ const RegisterForm = () => {
                 onChange={(e) => setUsername(e.target.value)}
             />
 
-            {usernameError && <p className="text-red-500">{usernameError}</p>}
-
             <PasswordInput
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 error={passwordError}
             />
 
-            {passwordError && <p className="text-red-500">{passwordError}</p>}
-
             <button
                 type="submit"
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg w-40"
-                onClick={handleSubmit}
             >
                 Cadastrar
             </button>
