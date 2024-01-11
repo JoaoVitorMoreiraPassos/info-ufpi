@@ -4,6 +4,7 @@ import "@fortawesome/fontawesome-svg-core/styles.css";
 import { Inter } from 'next/font/google';
 import './globals.css'
 import type { Metadata } from 'next'
+import { Auth } from "./components/Auth";
 // Tell Font Awesome to skip adding the CSS automatically 
 // since it's already imported above
 config.autoAddCss = false;
@@ -27,6 +28,7 @@ export default function RootLayout({
         <link rel="icon" href="/logo.png" />
       </head>
       <body className={inter.className}>
+        <Auth />
         {children}
       </body>
     </html>

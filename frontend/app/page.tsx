@@ -8,7 +8,7 @@ import '@/app/globals.css'
 import '@/app/style.css'
 
 export default function Home() {
-  metadata.title = 'Página Inicialn'
+  metadata.title = 'Página Inicial'
   return (
     <div>
       <div className="flex min-h-screen flex-row justify-start">
