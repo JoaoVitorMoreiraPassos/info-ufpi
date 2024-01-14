@@ -22,8 +22,8 @@ class Alimento(Base):
     # data = models.DateField(verbose_name='Data')
 
     class Meta:
-        verbose_name = 'Refeicao'
-        verbose_name_plural = 'Refeicoes'
+        verbose_name = 'Alimento'
+        verbose_name_plural = 'Alimentos'
         ordering = ['id']
 
     def __str__(self):
@@ -51,7 +51,7 @@ class Cardapio(Base):
     data = models.DateField(verbose_name='Data')
     alimentos = models.ManyToManyField(Alimento, related_name='cardapios')
     alimentos_adicionais = models.ManyToManyField(
-        AlimentoAdicional, related_name='cardapios', blank=True, null=True)
+        AlimentoAdicional, related_name='cardapios', blank=True)
 
     class Meta:
         verbose_name = 'Cardapio'

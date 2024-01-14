@@ -4,7 +4,7 @@ from .models import Alimento, AlimentoAdicional, Cardapio
 
 
 @admin.register(Alimento)
-class RefeicaoAdmin(admin.ModelAdmin):
+class AlimentoAdmin(admin.ModelAdmin):
     list_display = ('nome_refeicao', 'tipo_refeicao', 'ativo')
     list_filter = ('tipo_refeicao', 'ativo')
     search_fields = ('nome_refeicao', 'tipo_refeicao', 'ativo')
