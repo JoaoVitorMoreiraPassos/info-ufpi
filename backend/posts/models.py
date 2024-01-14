@@ -1,5 +1,6 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.conf import settings
+from accounts.models import User
 from PIL import Image
 # from django.conf import settings
 
@@ -16,7 +17,7 @@ class Base(models.Model):
 class Post(Base):
     titulo_post = models.CharField(max_length=255, verbose_name='Titulo')
     autor_post = models.ForeignKey(
-        User, on_delete=models.DO_NOTHING, verbose_name='Autor')
+        settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING, verbose_name='Autor')
     conteudo_post = models.TextField(verbose_name='Conteudo')
     imagem_post = models.ImageField(
         upload_to='post_img/%Y/%m/%d', blank=True, null=True, verbose_name='Imagem')
@@ -31,18 +32,20 @@ class Post(Base):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-        img = Image.open(self.imagem_post.path)
-        if img.height > 300 or img.width > 300:
-            output_size = (300, 300)
-            img.thumbnail(output_size)
-            img.save(self.imagem_post.path)
+
+        if self.imagem_post:
+            img = Image.open(self.imagem_post.path)
+            if img.height > 300 or img.width > 300:
+                output_size = (300, 300)
+                img.thumbnail(output_size)
+                img.save(self.imagem_post.path)
 
 
 class Comentario(Base):
     post_comentario = models.ForeignKey(
         Post, related_name='comentarios', on_delete=models.CASCADE, verbose_name='Post')
     autor_comentario = models.ForeignKey(
-        User, on_delete=models.DO_NOTHING, verbose_name='Autor')
+        settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING, verbose_name='Autor')
     conteudo_comentario = models.TextField(verbose_name='Conteudo')
 
     class Meta:
@@ -58,7 +61,7 @@ class Favorito(Base):
     post_favorito = models.ForeignKey(
         Post, related_name='favoritos', on_delete=models.CASCADE, verbose_name='Post')
     autor_favorito = models.ForeignKey(
-        User, on_delete=models.CASCADE, verbose_name='Autor')
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='Autor')
 
     class Meta:
         verbose_name = 'Favorito'
