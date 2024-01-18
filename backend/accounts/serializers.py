@@ -1,4 +1,5 @@
 from rest_framework import serializers
+
 # from django.contrib.auth import get_user_model
 from .models import User
 
@@ -7,11 +8,13 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
-            'id',
-            'username',
-            'email',
-            'password',
-            'foto_perfil'
+            "id",
+            "first_name",
+            "last_name",
+            "username",
+            "email",
+            "password",
+            "foto_perfil",
         ]
         # extra_kwargs = {'password': {'write_only': True}}
 
@@ -19,16 +22,11 @@ class UserSerializer(serializers.ModelSerializer):
 class UserDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = [
-            'id',
-            'username',
-            'email',
-            'foto_perfil'
-        ]
+        fields = ["id", "username", "email", "foto_perfil"]
         # extra_kwargs = {'password': {'write_only': True}}
 
 
 class UserPhotoSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['foto_perfil']
+        fields = ["foto_perfil"]
