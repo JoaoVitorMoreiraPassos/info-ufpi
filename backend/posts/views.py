@@ -1,20 +1,35 @@
-from rest_framework import generics
+from rest_framework import generics, status, permissions
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework.generics import get_object_or_404
+from rest_framework.permissions import IsAuthenticated, DjangoModelPermissions
 
-from .models import Post, Comentario, Favorito
-from .serializers import PostSerializer, ComentarioSerializer
+from .permissions import HasPostPermissions # Permission customizada
+
+from django.contrib.auth import get_user_model
+
+from .models import (
+    Post, 
+    Comentario, 
+    Favorito
+)
+from .serializers import (
+    PostSerializer, 
+    ComentarioSerializer, 
+    FavoritoSerializer
+)
 
 
 class PostsAPIView(generics.ListCreateAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+    permission_classes = [HasPostPermissions, ]
 
 
 class PostAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+    permission_classes = [HasPostPermissions, ]
 
 
 class ComentariosPagination(PageNumberPagination):
@@ -25,6 +40,7 @@ class ComentariosAPIView(generics.ListCreateAPIView):
     queryset = Comentario.objects.all()
     serializer_class = ComentarioSerializer
     pagination_class = ComentariosPagination
+    permission_classes = [IsAuthenticated, ]
 
     def get_queryset(self):
         if self.kwargs.get("post_pk"):
@@ -56,3 +72,48 @@ class ComentariosAPIView(generics.ListCreateAPIView):
 class ComentarioAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Comentario.objects.all()
     serializer_class = ComentarioSerializer
+
+
+class AddFavoritoAPIView(generics.CreateAPIView):
+    queryset = Favorito.objects.all()
+    serializer_class = FavoritoSerializer
+    permission_classes = [IsAuthenticated]
+
+    def create(self, request, *args, **kwargs):
+        post_id = self.kwargs.get("post_id")
+        post = get_object_or_404(Post, id=post_id)
+        user = get_user_model().objects.get(username=request.user)
+        favorito, created = Favorito.objects.get_or_create(post_favorito=post, autor_favorito=user)
+        if created:
+            return Response(
+                {
+                    "message": "Post adicionado aos favoritos com sucesso!",
+                    "favorito": request.data,
+                },
+                status=status.HTTP_201_CREATED
+            )
+        else:
+            return Response({"message": "Post já estava nos favoritos."}, status=status.HTTP_200_OK)
+
+
+class DeleteFavoritoAPIView(generics.DestroyAPIView):
+    queryset = Favorito.objects.all()
+    serializer_class = FavoritoSerializer
+    permission_classes = [IsAuthenticated]
+
+    def destroy(self, request, *args, **kwargs):
+        post_id = self.kwargs.get("post_id")
+        post = get_object_or_404(Post, id=post_id)
+        user = get_user_model().objects.get(username=request.user)
+        favorito = Favorito.objects.get(post_favorito=post, autor_favorito=user)
+        favorito.delete()
+        return Response({"message": "Post removido dos favoritos."}, status=status.HTTP_200_OK)
+
+class FavoritosAPIView(generics.ListAPIView):
+    queryset = Favorito.objects.all()
+    serializer_class = FavoritoSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return self.queryset.filter(autor_favorito=self.request.user)
+
