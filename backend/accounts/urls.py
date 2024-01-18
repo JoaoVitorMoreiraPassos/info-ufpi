@@ -11,8 +11,10 @@ from .views import CadastrarAPIView, UserDetailAPIView, UserPhotoUpdateAPIView
 
 urlpatterns = [
     path("cadastrar/", CadastrarAPIView.as_view(), name="cadastrar"),
+
     path("user-detail/", UserDetailAPIView.as_view(), name="user-detail"),
-    path("user-detail/<int:pk>/", UserDetailAPIView.as_view(), name="user-detail"),
+    # path("user-detail/<int:pk>/", UserDetailAPIView.as_view(), name="user-detail"),
+
     path("user-photo-update/", UserPhotoUpdateAPIView.as_view(), name="user-photo-update"),
 
 
