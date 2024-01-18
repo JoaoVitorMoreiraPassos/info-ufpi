@@ -1,24 +1,29 @@
-POST http://127.0.0.1:8000/cadastrar/ 
+# Cadastrar Usuários
+POST http://127.0.0.1:8000/api/v1/cadastrar/ 
 Content-Type: application/json
 
 { "username": "dayan1", "password": "dayan153", "email": "dayanramos5537@mail.com" }
 
 ###
 
-POST http://127.0.0.1:8000/login/ 
+# Login
+POST http://127.0.0.1:8000/api/v1/token/ 
 Content-Type: application/json
 
 { "username": "dayan", "password": "dayan" }
 
 ###
-
-GET http://127.0.0.1:8000/teste_token/ 
+# BUSCAR POSTS
+GET http://127.0.0.1:8000/api/v1/posts/
 Content-Type: application/json 
-Authorization: Token 3cd3222affba9e34c7656e70b788c70e2d0c3753
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzA1NTQ4MDM3LCJpYXQiOjE3MDU1NDA4MzcsImp0aSI6IjRlMGI0ODc0ZWZkYjQ2MTZhNzcyMjQ1MmM4YWZmMzU4IiwidXNlcl9pZCI6MX0.dVa35Vby2JMo3BWKwHGYzZ_nPDt9g6hAv0wc-6AR94w
 
 {}
 
 ###
-GET http://localhost:8000/api/v1/user-detail/
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzA1MzgyMjExLCJpYXQiOjE3MDUzNzUwMTEsImp0aSI6ImJjNzkwZWE0ZGQxYzQ1YmNhNmJmMzBjODhlZmFiNWZhIiwidXNlcl9pZCI6Mn0.b4TBgsuH1nEsBYWQSV94-fSC-B7pqVx0CblsDmd3SaY
+# BUSCAR COMENTARIOS POSTS
+GET http://127.0.0.1:8000/api/v1/posts/1/comentarios/
+Content-Type: application/json 
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzA1NTQ4MDM3LCJpYXQiOjE3MDU1NDA4MzcsImp0aSI6IjRlMGI0ODc0ZWZkYjQ2MTZhNzcyMjQ1MmM4YWZmMzU4IiwidXNlcl9pZCI6MX0.dVa35Vby2JMo3BWKwHGYzZ_nPDt9g6hAv0wc-6AR94w
+
+{}
