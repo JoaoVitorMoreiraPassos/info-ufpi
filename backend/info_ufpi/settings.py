@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     # Local apps
     "accounts",
     "posts",
-    "refeicao"
+    "refeicao",
 ]
 
 MIDDLEWARE = [
@@ -137,18 +137,16 @@ MEDIA_ROOT = BASE_DIR / "media"
 
 # Django REST Framework
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
+    "DEFAULT_AUTHENTICATION_CLASSES": (
         # 'rest_framework.authentication.SessionAuthentication',  # Autenticação por sessão
         # 'rest_framework.authentication.TokenAuthentication',  # Autenticação por token
-        'rest_framework_simplejwt.authentication.JWTAuthentication',  # Autenticação por JWT
+        "rest_framework_simplejwt.authentication.JWTAuthentication",  # Autenticação por JWT
     ),
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticatedOrReadOnly',  # Permissão de leitura para usuários anônimos
-
+    "DEFAULT_PERMISSION_CLASSES": (
+        "rest_framework.permissions.IsAuthenticatedOrReadOnly",  # Permissão de leitura para usuários anônimos
     ),
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',  # Paginação
-    'PAGE_SIZE': 2  # Quantidade de registros por página
-    
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",  # Paginação
+    "PAGE_SIZE": 2  # Quantidade de registros por página
     # 'DEFAULT_THROTTLE_CLASSES': (
     #     'rest_framework.throttling.AnonRateThrottle', # Limite de requisições anônimas
     #     'rest_framework.throttling.UserRateThrottle', # Limite de requisições por usuário
@@ -174,7 +172,6 @@ SIMPLE_JWT = {
     "BLACKLIST_AFTER_ROTATION": False,
     "SIGNING_KEY": settings.SECRET_KEY,
     "AUTH_HEADER_TYPES": ("Bearer",),
-
     "TOKEN_OBTAIN_SERIALIZER": "rest_framework_simplejwt.serializers.TokenObtainPairSerializer",
     "TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSerializer",
     "TOKEN_VERIFY_SERIALIZER": "rest_framework_simplejwt.serializers.TokenVerifySerializer",
