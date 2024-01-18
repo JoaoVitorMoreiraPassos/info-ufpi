@@ -34,8 +34,6 @@ class ComentariosAPIView(generics.ListCreateAPIView):
 
     def create(self, request, *args, **kwargs):
         serializer: ComentarioSerializer = self.get_serializer(data=request.data)
-        print(serializer)
-        print(serializer.is_valid())
         if serializer.is_valid():
             serializer.save()
 
@@ -49,8 +47,6 @@ class ComentariosAPIView(generics.ListCreateAPIView):
                 status=status.HTTP_201_CREATED,
                 headers=headers,
             )
-
-        print(serializer.errors)
         return Response(
             {"message": "Erro ao cadastrar comentário!", "errors": serializer.errors},
             status=status.HTTP_400_BAD_REQUEST,
