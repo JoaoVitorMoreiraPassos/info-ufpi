@@ -5,9 +5,9 @@ from django.conf import settings
 
 
 class ComentarioSerializer(serializers.ModelSerializer):
-    autor_comentario = serializers.ReadOnlyField(source="autor_comentario.username")
-    autor_comentario_id = serializers.IntegerField(write_only=True)
-    imagem_autor_comentario = serializers.SerializerMethodField()
+    autor_comentario_nome = serializers.ReadOnlyField(source="autor_comentario.username")
+    # autor_comentario_id = serializers.IntegerField(write_only=True)
+    imagem_autor_comentario = serializers.SerializerMethodField() # Pega a imagem do autor do comentario da seguinte forma 
 
     class Meta:
         model = Comentario
@@ -15,7 +15,7 @@ class ComentarioSerializer(serializers.ModelSerializer):
             "id",
             "post_comentario",
             "autor_comentario",
-            "autor_comentario_id",
+            "autor_comentario_nome",
             "imagem_autor_comentario",
             "conteudo_comentario",
             "criacao",
