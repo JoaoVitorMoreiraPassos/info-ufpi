@@ -42,8 +42,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # Libs
     "rest_framework",
+    "djoser",
     "rest_framework_simplejwt",
-    "rest_framework.authtoken",
     "django_filters",
     "corsheaders",
     # Local apps
@@ -139,11 +139,11 @@ MEDIA_ROOT = BASE_DIR / "media"
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         # 'rest_framework.authentication.SessionAuthentication',  # Autenticação por sessão
-        # 'rest_framework.authentication.TokenAuthentication',  # Autenticação por token
         "rest_framework_simplejwt.authentication.JWTAuthentication",  # Autenticação por JWT
     ),
     "DEFAULT_PERMISSION_CLASSES": (
-        "rest_framework.permissions.IsAuthenticatedOrReadOnly",  # Permissão de leitura para usuários anônimos
+        # Permissão de leitura para usuários anônimos
+        "rest_framework.permissions.IsAuthenticatedOrReadOnly",
     ),
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",  # Paginação
     "PAGE_SIZE": 2  # Quantidade de registros por página
@@ -168,7 +168,7 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=120),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
     "BLACKLIST_AFTER_ROTATION": False,
     "SIGNING_KEY": settings.SECRET_KEY,
     "AUTH_HEADER_TYPES": ("Bearer",),
@@ -179,3 +179,28 @@ SIMPLE_JWT = {
     "SLIDING_TOKEN_OBTAIN_SERIALIZER": "rest_framework_simplejwt.serializers.TokenObtainSlidingSerializer",
     "SLIDING_TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSlidingSerializer",
 }
+
+# DJOSER
+
+# DJOSER = {
+#     "PASSWORD_RESET_CONFIRM_URL": "password/reset/confirm/{uid}/{token}",
+#     # 'SEND_ACTIVATION_EMAIL': True,
+#     # 'SEND_CONFIRMATION_EMAIL': True,
+#     # 'SET_PASSWORD_RETYPE': True,
+#     # 'LOGOUT_ON_PASSWORD_CHANGE': True,
+#     # 'PASSWORD_RESET_CONFIRM_RETYPE': True,
+# }
+
+DJOSER = {
+    "PASSWORD_RESET_CONFIRM_URL": "/password/reset/confirm/{uid}/{token}", # tracar pela url do frontend depois
+    'PASSWORD_RESET_CONFIRM_RETYPE': True,
+}
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'joseegidio11@gmail.com'
+EMAIL_HOST_PASSWORD = 'myue eugs qdna smml'
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

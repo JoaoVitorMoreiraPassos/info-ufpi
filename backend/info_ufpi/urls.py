@@ -21,14 +21,22 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/v1/", include("posts.urls")),
     path("api/v1/", include("refeicao.urls")),
     path("api/v1/", include("accounts.urls")),
-    path("auth/", include("rest_framework.urls")),
-    # A rota de logout é http://localhost:8000/auth/logout/
+
+    # A rota para redefinir a senha é api/v1/users/reset_password/
+    # A rota para confirmar a redefinição de senha é api/v1/users/reset_password_confirm/
+    path("api/v1/", include("djoser.urls")),
+    path("api/v1/", include("djoser.urls.jwt")),
+
+
+
 ]
 
 if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.MEDIA_URL,
+                          document_root=settings.MEDIA_ROOT)
