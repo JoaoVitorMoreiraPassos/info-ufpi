@@ -19,14 +19,22 @@ class UserSerializer(serializers.ModelSerializer):
         ]
         extra_kwargs = {
             "post_permissoes": {"read_only": True},
-            "password": {"write_only": True}
+            "password": {"write_only": True},
         }
 
 
 class UserDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ["id", "username", "email", "foto_perfil", "post_permissoes"]
+        fields = [
+            "id",
+            "first_name",
+            "last_name",
+            "username",
+            "email",
+            "foto_perfil",
+            "post_permissoes",
+        ]
         # extra_kwargs = {'password': {'write_only': True}}
 
 
