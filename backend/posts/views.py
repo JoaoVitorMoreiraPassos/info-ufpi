@@ -25,6 +25,24 @@ class PostsAPIView(generics.ListCreateAPIView):
     serializer_class = PostSerializer
     permission_classes = [HasPostPermissions, ]
 
+    def create(self, request, *args, **kwargs):
+        # Adicionar o autor do post automaticamente
+        request.data["autor_post"] = request.user.id
+        serializer: PostSerializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+
+            headers = self.get_success_headers(serializer.data)
+
+            return Response(
+                {
+                    "message": "Post cadastrado com sucesso!",
+                    "post": serializer.data,
+                },
+                status=status.HTTP_201_CREATED,
+                headers=headers,
+            )
+
 
 class PostAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Post.objects.all()
