@@ -146,7 +146,7 @@ REST_FRAMEWORK = {
         "rest_framework.permissions.IsAuthenticatedOrReadOnly",
     ),
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",  # Paginação
-    "PAGE_SIZE": 2  # Quantidade de registros por página
+    "PAGE_SIZE": 4  # Quantidade de registros por página
     # 'DEFAULT_THROTTLE_CLASSES': (
     #     'rest_framework.throttling.AnonRateThrottle', # Limite de requisições anônimas
     #     'rest_framework.throttling.UserRateThrottle', # Limite de requisições por usuário
@@ -182,25 +182,25 @@ SIMPLE_JWT = {
 
 # DJOSER
 
-# DJOSER = {
-#     "PASSWORD_RESET_CONFIRM_URL": "password/reset/confirm/{uid}/{token}",
-#     # 'SEND_ACTIVATION_EMAIL': True,
-#     # 'SEND_CONFIRMATION_EMAIL': True,
-#     # 'SET_PASSWORD_RETYPE': True,
-#     # 'LOGOUT_ON_PASSWORD_CHANGE': True,
-#     # 'PASSWORD_RESET_CONFIRM_RETYPE': True,
-# }
-
 DJOSER = {
-    "PASSWORD_RESET_CONFIRM_URL": "/password/reset/confirm/{uid}/{token}", # tracar pela url do frontend depois
+    "PASSWORD_RESET_CONFIRM_URL": "dayan/lindo/vai/te/ajudar/{uid}/{token}",
+    'SEND_ACTIVATION_EMAIL': True,
+    'SEND_CONFIRMATION_EMAIL': True,
+    'SET_PASSWORD_RETYPE': True,
+    'LOGOUT_ON_PASSWORD_CHANGE': True,
     'PASSWORD_RESET_CONFIRM_RETYPE': True,
 }
+
+# DJOSER = {
+#     "PASSWORD_RESET_CONFIRM_URL": "/password/reset/confirm/{uid}/{token}", # tracar pela url do frontend depois
+#     'PASSWORD_RESET_CONFIRM_RETYPE': True,
+# }
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'joseegidio11@gmail.com'
-EMAIL_HOST_PASSWORD = 'myue eugs qdna smml'
+EMAIL_HOST_PASSWORD = ''
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
