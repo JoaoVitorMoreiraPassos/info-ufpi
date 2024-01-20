@@ -28,6 +28,8 @@ class AlimentoSerializer(serializers.ModelSerializer):
 
 class CardapioSerializer(serializers.ModelSerializer):
 
+    # alimentos = serializers.StringRelatedField(many=True)
+
     class Meta:
         model = Cardapio
         fields = (
@@ -35,6 +37,5 @@ class CardapioSerializer(serializers.ModelSerializer):
             'tipo',
             'data',
             'alimentos',
-            'alimentos_adicionais',
             'ativo',
         )
