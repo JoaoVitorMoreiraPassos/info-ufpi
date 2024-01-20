@@ -30,18 +30,6 @@ class Alimento(Base):
         return self.nome_refeicao
 
 
-class AlimentoAdicional(Base):
-    nome = models.CharField(max_length=255, verbose_name='Nome')
-
-    class Meta:
-        verbose_name = 'Alimento Adicional'
-        verbose_name_plural = 'Alimentos Adicionais'
-        ordering = ['nome']
-
-    def __str__(self):
-        return self.nome
-
-
 class Cardapio(Base):
     CARDAPIO_TYPE = (
         ('A', 'Almoço'),
@@ -50,8 +38,6 @@ class Cardapio(Base):
     tipo = models.CharField(max_length=1, choices=CARDAPIO_TYPE, default='A')
     data = models.DateField(verbose_name='Data')
     alimentos = models.ManyToManyField(Alimento, related_name='cardapios')
-    alimentos_adicionais = models.ManyToManyField(
-        AlimentoAdicional, related_name='cardapios', blank=True)
 
     class Meta:
         verbose_name = 'Cardapio'

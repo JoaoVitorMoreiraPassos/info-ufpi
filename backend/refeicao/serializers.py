@@ -1,20 +1,29 @@
 from rest_framework import serializers
 
-from .models import Alimento, AlimentoAdicional, Cardapio
+from .models import (
+    Alimento, 
+    # AlimentoAdicional, 
+    Cardapio
+)
 
 
 class AlimentoSerializer(serializers.ModelSerializer):
+
+    tipo_refeicao_nome = serializers.SerializerMethodField()
+
     class Meta:
         model = Alimento
         fields = (
             'id',
             'tipo_refeicao',
+            'tipo_refeicao_nome',
             'nome_refeicao',
             'ativo',
         )
-
-    # def create(self, validated_data):
-    #     return Refeicao.objects.create(**validated_data)
+    
+    # Retorna o nome do tipo de refeicao
+    def get_tipo_refeicao_nome(self, obj):
+        return obj.get_tipo_refeicao_display()
 
 
 class CardapioSerializer(serializers.ModelSerializer):

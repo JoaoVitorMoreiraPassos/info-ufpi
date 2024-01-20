@@ -3,7 +3,7 @@ from rest_framework.pagination import PageNumberPagination
 
 from .models import (
     Alimento,
-    AlimentoAdicional,
+    # AlimentoAdicional,
     Cardapio
 )
 from .serializers import (
