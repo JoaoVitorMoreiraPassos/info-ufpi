@@ -1,6 +1,6 @@
 from django.db import models
 from django.conf import settings
-from accounts.models import User
+# from accounts.models import User
 from PIL import Image
 # from django.conf import settings
 
@@ -25,7 +25,7 @@ class Post(Base):
     class Meta:
         verbose_name = 'Post'
         verbose_name_plural = 'Posts'
-        ordering = ['id']
+        ordering = ['-id']
 
     def __str__(self):
         return self.titulo_post
@@ -70,5 +70,5 @@ class Favorito(Base):
         # impede que um usuario favorito um post mais de uma vez
         unique_together = ['post_favorito', 'autor_favorito']
 
-    def __str__(self):
-        return f'{self.user.username} favoritou {self.post_favorito.titulo_post}'
+    # def __str__(self):
+    #     return f'{self.autor_favorito} favoritou {self.post_favorito}'

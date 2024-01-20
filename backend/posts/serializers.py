@@ -73,3 +73,5 @@ class FavoritoSerializer(serializers.ModelSerializer):
             "post_favorito",
             "autor_favorito",
         )
+
+    extra_kwargs = {"autor_favorito": {"read_only": True}}
