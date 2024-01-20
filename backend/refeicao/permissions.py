@@ -11,5 +11,5 @@ class HasRefeicaoPermissions(permissions.BasePermission):
             # Para GET, OPTIONS e HEAD, qualquer usuário pode acessar
             return True
         else:
-            # Para POST, UPDATE e DELETE, o usuário precisa ter a permissão post_permissoes=True
-            return request.user.refeicao_permissoes
+            # Para POST, UPDATE e DELETE, o usuário precisa ter a permissão post_permissoes=True ou ser superuser
+            return request.user.refeicao_permissoes or request.user.is_superuser
