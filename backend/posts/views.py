@@ -2,7 +2,7 @@ from rest_framework import generics, status, permissions
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.generics import get_object_or_404
-from rest_framework.permissions import IsAuthenticated, DjangoModelPermissions
+from rest_framework.permissions import IsAuthenticated, DjangoModelPermissions, IsAuthenticatedOrReadOnly
 
 from .permissions import HasPostPermissions # Permission customizada
 
@@ -58,7 +58,7 @@ class ComentariosAPIView(generics.ListCreateAPIView):
     queryset = Comentario.objects.all()
     serializer_class = ComentarioSerializer
     pagination_class = ComentariosPagination
-    permission_classes = [IsAuthenticated, ]
+    permission_classes = [IsAuthenticatedOrReadOnly, ]
 
     def get_queryset(self):
         if self.kwargs.get("post_pk"):
