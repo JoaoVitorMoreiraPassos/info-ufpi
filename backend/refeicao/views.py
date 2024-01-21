@@ -3,7 +3,6 @@ from rest_framework.pagination import PageNumberPagination
 
 from .models import (
     Alimento,
-    AlimentoAdicional,
     Cardapio
 )
 from .serializers import (
@@ -35,6 +34,9 @@ class CardapiosAPIView(generics.ListCreateAPIView):
     queryset = Cardapio.objects.all()
     serializer_class = CardapioSerializer
     permission_classes = [HasRefeicaoPermissions, ]
+
+    def get_queryset(self):
+        return Cardapio.objects.filter(ativo=True)
 
 
 class CardapioAPIView(generics.RetrieveDestroyAPIView):
