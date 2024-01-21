@@ -85,7 +85,7 @@ const SideBar = () => {
 
     return (
 
-        <div>
+        <>
             <div className={`sideBar relative flex-col justify-start hidden ${inria_serif.className}`}>
                 <ul>
                     <li className='flex justify-end h-16' key='side_menu_closer'>
@@ -152,7 +152,7 @@ const SideBar = () => {
                         </div >
                     )
             } */}
-        </div>
+        </>
     )
 }
 export default SideBar;

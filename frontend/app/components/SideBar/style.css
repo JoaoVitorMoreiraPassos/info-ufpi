@@ -4,7 +4,7 @@
     padding-bottom: 9rem;
     color: rgb(var(--font-color));
     transition: all 0.5s ease;
-    overflow-x: hidden;
+    overflow: hidden;
 }
 
 li {
@@ -138,5 +138,4 @@ li img {
 
         }
     }
-
 }
