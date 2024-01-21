@@ -14,7 +14,7 @@ from .permissions import HasRefeicaoPermissions
 
 
 class AlimentosPagination(PageNumberPagination):
-    page_size = 4
+    page_size = 1000
 
 
 class AlimentosAPIView(generics.ListCreateAPIView):
@@ -29,6 +29,9 @@ class AlimentoAPIView(generics.RetrieveDestroyAPIView):
     serializer_class = AlimentoSerializer
     permission_classes = [HasRefeicaoPermissions, ]
 
+
+class CardapiosPagination(PageNumberPagination):
+    page_size = 1000
 
 class CardapiosAPIView(generics.ListCreateAPIView):
     queryset = Cardapio.objects.all()
