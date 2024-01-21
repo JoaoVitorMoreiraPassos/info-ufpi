@@ -8,7 +8,7 @@ import Link from 'next/link'
 
 const Footer = () => {
     return (
-        <div className='flex md:justify-evenly flex-wrap md:items-start bg-sky-700 text-slate-50 py-4 h-25 max-md:flex-col max-md:items-center max-md:justify-center max-md:gap-4'>
+        <div className='flex md:justify-evenly flex-wrap md:items-start bg-sky-700 text-slate-50 py-4 h-25 max-md:flex-col max-md:items-center max-md:justify-center max-md:gap-4 '>
             <div className="footer-logo">
                 <Image alt="Logo" src='/logo.png' width={241} height={202.24} className=' mix-blend-screen w-52 h-auto' />
             </div>
