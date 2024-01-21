@@ -5,9 +5,9 @@
     flex-direction: row;
 }
 
-.navContainer div {
+/* .navContainer div {
     height: 100%;
-}
+} */
 
 img {
     width: 100%;
@@ -19,10 +19,14 @@ img {
 }
 
 .hamburguerMenu {
-    display: flex;
+    /* display: flex; */
     justify-content: center;
     align-items: center;
     transition: all 0.5s ease;
+}
+
+.pages {
+    display: flex;
 }
 
 .navPageOption {

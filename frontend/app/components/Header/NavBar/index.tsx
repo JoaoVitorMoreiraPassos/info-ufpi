@@ -24,15 +24,14 @@ const NavBar = ({ page_index: page_index }: { page_index: undefined | Number }) 
 
     return (
 
-        <>
+        <div>
             <div className='flex navPages items-center mx-6 overflow-hidden'>
-                <div className='hamburguerMenu'>
+                <div className='hamburguerMenu flex h-full'>
                     <button onClick={() => {
 
                         const sideBar = document.querySelector('.sideBar');
                         const hamburguerMenu = document.querySelector('.hamburguerMenu');
                         const mainContainer = document.querySelector('.mainContainer');
-                        console.log(sideBar + ' ' + hamburguerMenu);
                         if (sideBar) {
                             sideBar.classList.add('open');
                             sideBar.classList.remove('hidden');
@@ -51,7 +50,7 @@ const NavBar = ({ page_index: page_index }: { page_index: undefined | Number }) 
                         <i><FontAwesomeIcon icon={faBars} /></i>
                     </button>
                 </div>
-                <div className='pages w-full flex flex-row'>
+                <div className='pages w-full flex-row h-full'>
                     {
                         menu_options.map((option, index) => {
                             const class_name = 'opacity-70 px-6 py-3 hover:opacity-100 transition duration-300 ease-in-out ' + option[2];
@@ -129,7 +128,7 @@ const NavBar = ({ page_index: page_index }: { page_index: undefined | Number }) 
                         </div>
                     )
             } */}
-        </>
+        </div>
     )
 }
 
