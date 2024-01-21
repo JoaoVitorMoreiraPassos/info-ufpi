@@ -3,6 +3,7 @@ import ContactContent from '../components/MainContent/ContactContent'
 import SideBar from '../components/SideBar'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import '@/app/globals.css'
 
 const Contato = () => {
     return (
@@ -10,13 +11,13 @@ const Contato = () => {
             <div className="flex min-h-screen flex-row justify-start">
                 <SideBar />
                 <div className='mainContainer'>
-                    <Header page_index={1} />
-                    <main className='h-full'>
+                    <Header page_index={2} />
+                    <main >
                         <ContactContent />
                     </main>
                 </div>
             </div>
-            <footer>
+            <footer >
                 <Footer />
             </footer>
         </div>
