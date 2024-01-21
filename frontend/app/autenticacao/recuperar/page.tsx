@@ -2,7 +2,9 @@
 import './style.css';
 import React from 'react';
 import Image from 'next/image';
-
+import UserApi from '@/app/api/user';
+import { ToastContainer, toast, toastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const RecuperarSenha = () => {
 
@@ -19,9 +21,10 @@ const RecuperarSenha = () => {
         setLoading(true)
         setError('')
         try {
-            // await auth.signInWithEmailAndPassword(email, senha)
+            await UserApi.recuperarSenha(email)
+            toast.success('Email enviado com sucesso!')
         } catch (error: any) {
-            setError(error.message)
+            toast.error(error.response.data.message)
         }
         setLoading(false)
     }
@@ -30,6 +33,7 @@ const RecuperarSenha = () => {
 
     return (
         <main className='bg-white'>
+            <ToastContainer />
             <div className="container mx-auto px-6 py-8 ">
                 <div className="flex justify-center">
                     <div className="w-full xl:w-3/4 lg:w-11/12 flex flex-col items-center">
@@ -40,28 +44,18 @@ const RecuperarSenha = () => {
                                 <label className="block mb-2 text-sm font-bold text-gray-700" htmlFor="email">
                                     Email
                                 </label>
-                                <input className={
-                                    error ?
-                                        "error " + "w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                                        : "w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                                } id="email" type="email" placeholder="Email" onChange={e => setEmail(e.target.value)} />
+                                <input value={email}
+                                    className={
+                                        error ?
+                                            "error " + "w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                                            : "w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                                    } id="email" type="email" placeholder="Email" onChange={e => setEmail(e.target.value)} />
                                 {error && <p className="text-xs italic text-red-500">{error}</p>}
                             </div>
                             <div className="mb-6 text-center">
                                 <button className="md:w-80 max-md:w-full px-4 py-2 font-bold text-white bg-blue-500 rounded-xl hover:bg-blue-700 focus:outline-none focus:shadow-outline" onClick={handleSubmit}>
                                     Recuperar
                                 </button>
-                            </div>
-                            <hr className="mb-6 border-t" />
-                            <div className="text-center">
-                                <a className="inline-block text-sm text-blue-500 align-baseline hover:text-blue-800" href="/autenticacao/cadastro">
-                                    Criar conta
-                                </a>
-                            </div>
-                            <div className="text-center">
-                                <a className="inline-block text-sm text-blue-500 align-baseline hover:text-blue-800" href="/autenticacao/login">
-                                    Já tem uma conta? Faça login!
-                                </a>
                             </div>
                         </section>
                     </div>

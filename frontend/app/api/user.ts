@@ -54,6 +54,41 @@ class User {
         }
     }
 
+    async recuperarSenha(email: string) {
+        try {
+            const response = await axios.post(this.route() + 'users/reset_password/', {
+                "email": email,
+            }, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            return response
+        }
+        catch (error) {
+            throw error;
+        }
+    }
+
+    async resetarSenha(password1: string, password2: string, uid: string, token: string) {
+        try {
+            const response = await axios.post(this.route() + 'users/reset_password_confirm/', {
+                "uid": uid,
+                "token": token,
+                "new_password": password1,
+                "re_new_password": password2
+            }, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            return response
+        }
+        catch (error) {
+            throw error;
+        }
+    }
+
     async UpdateUser(first_name: string, last_name: string, username: string, email: string, image: any) {
         try {
             const token = localStorage.getItem('access')
