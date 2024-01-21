@@ -4,8 +4,8 @@ import Header from '@/app/components/Header';
 import Footer from '@/app/components/Footer';
 import NoticeContent from '@/app/components/MainContent/NoticeContent';
 import { useRouter } from 'next/router';
-import '@/app/globals.css';
 import { Inria_Serif } from 'next/font/google';
+import '@/app/globals.css';
 
 const inria_serif = Inria_Serif({ subsets: ['latin'], weight: ["300"] })
 
@@ -16,8 +16,8 @@ export default function Notice() {
 
     React.useEffect(() => {
         // Modifique o metadata após a renderização inicial
-        document.title = slug as string;
-    });
+        document.title = "";
+    }, []);
 
 
     return (
