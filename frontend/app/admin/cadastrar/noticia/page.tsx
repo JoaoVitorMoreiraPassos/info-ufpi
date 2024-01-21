@@ -1,3 +1,4 @@
+'use client';
 import ImageInput from '@/app/components/ImageInput';
 import SideBar from '@/app/components/SideBar';
 import Header from '@/app/components/Header';
@@ -7,11 +8,25 @@ import '@/app/globals.css';
 import './style.css';
 import { useState, useEffect } from 'react';
 import NoticeForm from '@/app/components/NoticeForm';
+import UserApi from '@/app/api/user';
 
 
 const CadastrarNoticia = () => {
+    useEffect(() => {
+        const getUser = async () => {
+            console.log('teste')
+            const response = await UserApi.GetLoggedUser();
+            if (!response) window.location.href = '/';
+            if (response == null) return console.log('error');
+            if (response == undefined) return console.log('error');
+            if (!response.post_permissoes) window.location.href = '/perfil';
+        }
+        getUser()
+    })
 
-    metadata.title = 'Noticia'
+    useEffect(() => {
+        document.title = 'Cadastrar Notícia'
+    }, [])
     return (
         <div>
             <div className="flex flex-row justify-start" >
