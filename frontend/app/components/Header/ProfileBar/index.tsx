@@ -74,7 +74,7 @@ const ProfileBar = () => {
             'Entrar/Cadastrar'
           }</Link>
         )}
-        <div className='usernameFloat hidden absolute top-20 transition-all right-4 bg-slate-100 text-slate-600 p-2 rounded-lg h-10 z-50'>
+        <div className='usernameFloat hidden absolute top-20 transition-all right-6 bg-slate-100 text-slate-600 p-2 rounded-lg h-10 z-50'>
           <p className='text-sm'>@{username}</p>
         </div>
       </div>

@@ -16,7 +16,6 @@ const Footer = () => {
                 <h4 className='underline'>INFO UFPI</h4>
                 <ul className='flex-column gap-3 mt-4 max-md:flex max-md:flex-col max-md:items-center'>
                     <li><Link href="/">Home</Link></li>
-                    <li><Link href="/nae/">NAE</Link></li>
                     <li><Link href="/sobre/">Sobre</Link></li>
                     <li><Link href="/contato/">Contato</Link></li>
                 </ul>
