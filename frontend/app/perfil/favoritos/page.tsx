@@ -5,6 +5,7 @@ import Header from '../../components/Header'
 import Footer from '@/app/components/Footer'
 import { metadata } from '@/app/layout'
 import '@/app/globals.css'
+import PostApi from '@/app/api/post'
 
 const Perfil = () => {
     metadata.title = 'Favoritos';
@@ -27,13 +28,13 @@ const Perfil = () => {
                         <p className='text-3xl text-left text-black font-bold w-full'>
                             Favoritos
                         </p>
-                        {
+                        {/* {
                             favorites.map((favorite, index) => {
                                 return (
                                     <NoticeCardPerfil notice_infos={favorite} key={'favorite' + index} />
                                 )
                             })
-                        }
+                        } */}
                     </main>
                 </div>
             </div>

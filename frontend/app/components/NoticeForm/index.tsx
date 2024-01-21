@@ -2,7 +2,8 @@
 import React from 'react';
 import ImageInput from '@/app/components/ImageInput';
 import { useState, useEffect } from 'react';
-
+import UserApi from '@/app/api/user';
+import PostApi from '@/app/api/post';
 
 const NoticeForm = () => {
 
@@ -27,6 +28,8 @@ const NoticeForm = () => {
             setDescription(value);
             setDescriptionError(false);
         }
+
+
     }
 
     const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -52,17 +55,13 @@ const NoticeForm = () => {
         }
 
         event.preventDefault();
-        const formData = new FormData();
-        formData.set('title', title);
-        formData.set('description', description);
-        formData.set('image', image as File);
-        console.log(formData);
-        const response = await fetch('http://localhost:3000/api/notices', {
-            method: 'POST',
-            body: formData
-        })
-        const data = await response.json();
-        console.log(data);
+
+        try {
+            const response = await PostApi.CreatePost(title, description, image)
+            console.log(response);
+        } catch (err) {
+            console.log(err);
+        }
     }
 
 

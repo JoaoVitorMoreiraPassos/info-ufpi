@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import PasswordInput from '@/app/components/PasswordInput';
 import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
-import axios from 'axios';
+import UserApi from '@/app/api/user';
 
 const RegisterForm = () => {
     const [firstName, setFirstName] = useState('');
@@ -52,31 +52,20 @@ const RegisterForm = () => {
         event.preventDefault();
 
         if (isValid()) {
-
-            const data = {
-                "first_name": firstName,
-                "last_name": lastName,
-                "username": username,
-                "email": email,
-                "password": password
+            try {
+                await UserApi.Register(firstName, lastName, username, email, password);
+                toast.success('Cadastro efetuado com sucesso!')
+                setTimeout(() => {
+                    window.location.href = '/autenticacao/login';
+                }, 1000);
+            } catch (error: any) {
+                if (error.response.status === 404) {
+                    toast.error('Usuário ou senha incorretos.')
+                }
+                else {
+                    toast.error('Erro ao efetuar login.')
+                }
             }
-
-            await axios.post('http://localhost:8000/cadastrar/', data)
-                .then((response) => {
-                    if (response.status === 201) {
-                        toast.success("Usuário cadastrado com sucesso!")
-                        const token = response.data.token;
-                        const user = response.data.user;
-                        localStorage.setItem('token', token);
-                        localStorage.setItem('user', JSON.stringify(user));
-                        window.location.href = '/';
-                    }
-                })
-                .catch((error) => {
-                    if (error.response.status == 400) {
-                        toast.error("Erro ao cadastrar usuário!");
-                    }
-                })
         }
     }
 
@@ -110,7 +99,7 @@ const RegisterForm = () => {
                 type="text"
                 name="username"
                 id="username"
-                placeholder="E-mail ou telefone"
+                placeholder="Nome de usuário"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
             />

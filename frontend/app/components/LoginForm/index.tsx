@@ -4,6 +4,7 @@ import PasswordInput from '@/app/components/PasswordInput'
 import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
+import UserApi from '@/app/api/user';
 // npm
 
 
@@ -37,33 +38,31 @@ const LoginForm = () => {
 
         if (isValid()) {
 
-            const data = {
-                username,
-                password
+            try {
+                const response = await UserApi.Login(username, password);
+                const access = response.access
+                const refresh = response.refresh
+                localStorage.setItem("access", access);
+                localStorage.setItem("refresh", refresh);
+                toast.success('Login efetuado com sucesso!')
+                setTimeout(() => {
+                    window.location.href = '/';
+                }, 1000);
+            } catch (error: any) {
+                if (error.response.status === 400) {
+                    toast.error('Usuário ou senha incorretos.')
+                }
+                else {
+                    toast.error('Erro ao efetuar login.')
+                }
             }
 
-            await axios.post('http://localhost:8000/login/', data)
-                .then((response) => {
-                    if (response.status == 200) {
-                        const token = response.data.token;
-                        localStorage.setItem('token', token);
-                        localStorage.setItem('user', JSON.stringify(response.data.user));
-                        toast.success('Login realizado com sucesso!');
-                        setTimeout(() => {
-                            window.location.href = '/';
-                        }, 1000)
-                    }
-
-                })
-                .catch((error) => {
-                    toast.error(error.response?.data?.message ? error.response.data.message : 'Usuário não encontrado!')
-                })
         }
 
     }
 
     return (
-        <>
+        <div>
             <form className='flex flex-col p-6 gap-6 w-1/1 items-center' onSubmit={handleSubmit}>
                 <ToastContainer />
                 <input
@@ -88,7 +87,7 @@ const LoginForm = () => {
                     Entrar
                 </button>
             </form>
-        </>
+        </div>
     );
 }
 

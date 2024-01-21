@@ -1,17 +1,27 @@
 'use client'
-import React from 'react'
+import React, { useEffect } from 'react'
 import MealForm from '../MealForm'
 import { useState } from 'react'
 import { format } from 'date-fns-tz';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+// import axios from 'axios';
+import api from '@/app/api/ru';
 
-
-interface recipe {
+interface Item {
     id: number,
-    name: string,
-    type: string
+    nome_refeicao: string,
+    tipo_refeicao: string
 }
 
-const MealFormsContainer = ({ regular_recipes, veg_recipes, follow_ups }: { regular_recipes: recipe[], veg_recipes: recipe[], follow_ups: recipe[] }) => {
+interface cardapio {
+    data: string,
+    tipo: string,
+    alimentos: Array<Number>,
+    alimentos_adicionais: Array<Number>
+}
+
+const MealFormsContainer = ({ regular_recipes, veg_recipes, follow_ups }: { regular_recipes: Item[], veg_recipes: Item[], follow_ups: Item[] }) => {
 
     const brazilianTimeZone = 'America/Sao_Paulo';
 
@@ -20,93 +30,55 @@ const MealFormsContainer = ({ regular_recipes, veg_recipes, follow_ups }: { regu
     });
 
     const [date, setDate] = useState(currentDateTimeInBrazil);
+    const [almocoGeral, setAlmocoGeral] = useState();
+    const [almocoVeg, setAlmocoVeg] = useState();
+    const [almocoAcompanhamentos, setAlmocoAcompanhamentos] = useState<Array<Item>>([]);
+    const [jantarGeral, setJantarGeral] = useState();
+    const [jantarVeg, setJantarVeg] = useState();
+    const [jantarAcompanhamentos, setJantarAcompanhamentos] = useState<Array<Item>>([]);
 
-    const Submit = () => {
-        console.log("aqui entrou.");
-        const morging_meal = document.querySelector('#café-da-manhã-form') as HTMLInputElement;
-        const lunch_meal = document.querySelector('#almoço-form') as HTMLInputElement;
-        const dinner_meal = document.querySelector('#jantar-form') as HTMLInputElement;
 
-        const morging_meal_inputs = morging_meal?.querySelectorAll('input[type="checkbox"]') as NodeListOf<HTMLInputElement>;
-        const lunch_meal_inputs = lunch_meal?.querySelectorAll('input[type="checkbox"]') as NodeListOf<HTMLInputElement>;
-        const dinner_meal_inputs = dinner_meal?.querySelectorAll('input[type="checkbox"]') as NodeListOf<HTMLInputElement>;
 
-        const morging_meal_checked_inputs = Array.from(morging_meal_inputs).filter((input) => input.checked);
-        const lunch_meal_checked_inputs = Array.from(lunch_meal_inputs).filter((input) => input.checked);
-        const dinner_meal_checked_inputs = Array.from(dinner_meal_inputs).filter((input) => input.checked);
+    const Submit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        console.log(date);
+        if (almocoGeral && almocoVeg && almocoAcompanhamentos.length > 0 && jantarGeral && jantarVeg && jantarAcompanhamentos.length > 0) {
+            console.log(date);
 
-        const morging_meal_checked_inputs_values = morging_meal_checked_inputs.map((input) => [input.name.slice(0, -1), input.name.slice(-1),]);
-        const lunch_meal_checked_inputs_values = lunch_meal_checked_inputs.map((input) => [input.name.slice(0, -1), input.name.slice(-1),]);
-        const dinner_meal_checked_inputs_values = dinner_meal_checked_inputs.map((input) => [input.name.slice(0, -1), input.name.slice(-1),]);
-
-        console.log(morging_meal_checked_inputs_values);
-        console.log(lunch_meal_checked_inputs_values);
-        console.log(dinner_meal_checked_inputs_values);
-
-        const morning_meal_selects = morging_meal?.querySelectorAll('select') as NodeListOf<HTMLSelectElement>;
-        const lunch_meal_selects = lunch_meal?.querySelectorAll('select') as NodeListOf<HTMLSelectElement>;
-        const dinner_meal_selects = dinner_meal?.querySelectorAll('select') as NodeListOf<HTMLSelectElement>;
-
-        const meals = {
-            'date': date,
-            'morging_meal': {
-                'regular_recipe': morning_meal_selects[0].value,
-                'veg_recipe': morning_meal_selects[1].value,
-                'follow_ups': morging_meal_checked_inputs_values,
-            },
-            'lunch_meal': {
-                'regular_recipe': lunch_meal_selects[0].value,
-                'veg_recipe': lunch_meal_selects[1].value,
-                'follow_ups': lunch_meal_checked_inputs_values,
-            },
-            'dinner_meal': {
-                'regular_recipe': dinner_meal_selects[0].value,
-                'veg_recipe': dinner_meal_selects[1].value,
-                'follow_ups': dinner_meal_checked_inputs_values,
-            },
+            const sendCardapio = async (cardapio: cardapio) => {
+                try {
+                    const response = await api.postCardapio(cardapio);
+                    console.log(response);
+                    if (response.status === 201) {
+                        toast.success(`${cardapio.tipo === 'A' ? 'Almoço' : 'Jantar'} cadastrado com sucesso!`);
+                    }
+                } catch (error) {
+                    console.log(error);
+                    return;
+                }
+            }
+            const almoco: cardapio = {
+                data: date,
+                tipo: 'A',
+                alimentos: [almocoGeral, almocoVeg, ...almocoAcompanhamentos.map((item) => item.id)],
+                alimentos_adicionais: []
+            }
+            const jantar: cardapio = {
+                data: date,
+                tipo: 'J',
+                alimentos: [jantarGeral, jantarVeg, ...jantarAcompanhamentos.map((item) => item.id)],
+                alimentos_adicionais: []
+            }
+            const result = await Promise.all([sendCardapio(almoco), sendCardapio(jantar)]);
         }
-
-        // Verifica se os campos estão vazios
-        // O usuário deve preencher pelos menos uma das refeições(manhã, almoço ou jantar)
-
-        if (meals.morging_meal.regular_recipe === '' && meals.morging_meal.veg_recipe === '' && meals.morging_meal.follow_ups.length === 0) {
-            alert('Preencha as opções de café da manhã');
-            return;
+        else {
+            toast.error('Preencha todos os campos!');
         }
-
-        if (meals.lunch_meal.regular_recipe === '' && meals.lunch_meal.veg_recipe === '' && meals.lunch_meal.follow_ups.length === 0) {
-            alert('Preencha as opções de almoço');
-            return;
-        }
-
-        if (meals.dinner_meal.regular_recipe === '' && meals.dinner_meal.veg_recipe === '' && meals.dinner_meal.follow_ups.length === 0) {
-            alert('Preencha as opções de jantar');
-            return;
-        }
-
-        const formdate = new FormData();
-        formdate.append('date', meals.date);
-        formdate.append('morging_meal', JSON.stringify(meals.morging_meal));
-        formdate.append('lunch_meal', JSON.stringify(meals.lunch_meal));
-        formdate.append('dinner_meal', JSON.stringify(meals.dinner_meal));
-
-        const url = 'http://localhost:3333/meal';
-        const options = {
-            method: 'POST',
-            body: formdate,
-        }
-
-        fetch(url, options)
-            .then((response) => {
-                console.log(response);
-            })
-            .catch((error) => {
-                console.log(error);
-            })
     }
 
     return (
-        <div className='flex-col flex py-14 px-6 justify-start items-center w-full gap-8'>
+        <form className='flex-col flex py-14 px-6 justify-start items-center w-full gap-8' onSubmit={Submit}>
+            <ToastContainer />
             <p className='text-2xl'>
                 Cadastrar Refeição
             </p>
@@ -126,26 +98,23 @@ const MealFormsContainer = ({ regular_recipes, veg_recipes, follow_ups }: { regu
 
             <div className='h-full w-full'>
                 <div className=' flex flex-row justify-center min-w-300 gap-4 border-blue-500 flex-wrap'>
-                    <section >
+                    {/* <section >
                         <MealForm regular_recipes={regular_recipes} veg_recipes={veg_recipes} meal='Café da Manhã' follow_ups={follow_ups} />
+                    </section> */}
+                    <section >
+                        <MealForm regular_recipes={regular_recipes} veg_recipes={veg_recipes} meal='Almoço' follow_ups={follow_ups} listenners={[[almocoGeral, setAlmocoGeral], [almocoVeg, setAlmocoVeg], [almocoAcompanhamentos, setAlmocoAcompanhamentos]]} />
                     </section>
                     <section >
-                        <MealForm regular_recipes={regular_recipes} veg_recipes={veg_recipes} meal='Almoço' follow_ups={follow_ups} />
-                    </section>
-                    <section >
-                        <MealForm regular_recipes={regular_recipes} veg_recipes={veg_recipes} meal='Jantar' follow_ups={follow_ups} />
+                        <MealForm regular_recipes={regular_recipes} veg_recipes={veg_recipes} meal='Jantar' follow_ups={follow_ups} listenners={[[jantarGeral, setJantarGeral], [jantarVeg, setJantarVeg], [jantarAcompanhamentos, setJantarAcompanhamentos]]} />
                     </section>
                 </div>
                 <div className='flex flex-row w-full justify-center mt-12 flex-wrap-reverse items-start gap-8 px-8 pb-8'>
-                    <button className='bg-green-500 text-white w-1/2 h-14 rounded-xl text-xl'
-                        onClick={() => Submit()}
-                    >
+                    <button className='bg-green-500 text-white w-1/2 h-14 rounded-xl text-xl' type='submit'>
                         Cadastrar
                     </button>
                 </div>
             </div>
-        </div>
+        </form>
     )
 }
-
-export default MealFormsContainer;
+export default MealFormsContainer

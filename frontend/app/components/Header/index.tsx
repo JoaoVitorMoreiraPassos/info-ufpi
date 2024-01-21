@@ -6,17 +6,17 @@ import ProfileBar from './ProfileBar'
 import { useState, useEffect } from 'react'
 import './style.css'
 
-const inria_serif = Inria_Serif({ weight: "700", subsets: ['latin'], })
+const inria_serif = Inria_Serif({ weight: "300", subsets: ['latin'], })
 
 const Header = ({ page_index }: { page_index: undefined | Number }) => {
 
   return (
-    <>
-      <div className={`  h-20 navContainer navbar-center text-white text-xl flex-row items-center justify-between ${inria_serif.className}`}>
-        <NavBar page_index={page_index} />
-        <ProfileBar />
-      </div>
-    </>
+
+    <div className={` max-[1024px]:fixed h-20 navContainer navbar-center text-white text-xl flex-row items-center justify-between ${inria_serif.className}`}>
+      <NavBar page_index={page_index} />
+      <ProfileBar />
+    </div>
+
   )
 }
 

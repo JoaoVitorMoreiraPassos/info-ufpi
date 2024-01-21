@@ -19,7 +19,7 @@ const ContactContent = () => {
     }
 
     return (
-        <div className='w-full h-4/5 flex flex-col justify-center items-center'>
+        <div className='w-full h-full flex flex-col justify-center items-center py-20'>
             <h1 className='text-4xl  md:w-2/3 lg:max-w-2xl max-md:text-2xl text-center'>
                 Procurando ajuda? Entre em contato!
             </h1>

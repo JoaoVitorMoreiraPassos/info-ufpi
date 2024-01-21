@@ -3,68 +3,87 @@ import './style.css';
 import React from 'react'
 import reactDOM from 'react-dom';
 import RecipeDelete from '../RecipeDelete'
+import { useState, useEffect } from 'react';
+import api from '@/app/api/ru';
 
 interface Item {
     id: number,
-    name: string,
-    type: string
+    nome_refeicao: string,
+    tipo_refeicao: string
 }
 
-interface Items {
-    items: [Item],
-}
+const RecipeItemRegister = ({ items, title, tipo }: { items: Item[], title: string, tipo: string }) => {
 
+    const [newItem, setNewItem] = useState("");
 
+    const add_item = async (type: string) => {
 
-const RecipeItemRegister = ({ items, title }: { items: Item[], title: string }) => {
+        try {
 
-    const add_item = (type: string) => {
-        const input = document.querySelector(`#${type}`) as HTMLInputElement;
-        const value = input.value;
-        if (value) {
-            const item: Item = {
-                id: items[items.length - 1].id + 1,
-                name: value,
-                type: type,
-            };
-            items.push(item);
-            input.value = '';
-            const alreadyRegisterElement = document.querySelector(`.alreadyRegister.${items[0].type}`);
-            if (alreadyRegisterElement) {
-                let div = document.createElement('div');
-                div.id = item.type + item.id;
-                let recipeDelete = <RecipeDelete item={item} />;
-                div.addEventListener('', () => {
+            const response = await api.postAlimento({
+                nome_refeicao: newItem,
+                tipo_refeicao: type,
+            })
+            console.log(response)
+            if (response.status === 201) {
+                alert('Refeição cadastrada com sucesso!');
+                const input = document.querySelector(`#${type}`) as HTMLInputElement;
+                if (newItem !== '') {
+                    const item: Item = {
+                        id: response.data.id,
+                        nome_refeicao: newItem,
+                        tipo_refeicao: type,
+                    };
+                    input.value = '';
+                    const alreadyRegisterElement = document.querySelector(`.alreadyRegister.${tipo}`);
+                    if (alreadyRegisterElement) {
+                        let div = document.createElement('div');
+                        div.id = item.tipo_refeicao + item.id;
+                        let recipeDelete = <RecipeDelete item={item} />;
+                        div.addEventListener('', () => {
 
-                })
-                reactDOM.render(recipeDelete, div);
-                alreadyRegisterElement.appendChild(div);
+                        })
+                        reactDOM.render(recipeDelete, div);
+                        alreadyRegisterElement.appendChild(div);
+                    }
+                }
             }
+        } catch (error) {
+            console.log(error);
+            return;
         }
+
 
     }
 
     return (
         <section className='flex-col flex p-8 items-center gap-4 toPutShadow'>
             <div className='flex flex-col gap-2'>
-                <label htmlFor={items[0].type} className='text-xl'>{title}</label>
+                <label htmlFor={tipo} className='text-xl'>{title}</label>
                 <input onKeyDown={
                     (e) => {
                         if (e.key === 'Enter') {
-                            add_item(items[0].type);
+                            add_item(tipo);
                         }
                     }
-                } type="text" name={items[0].type} id={items[0].type} className='border border-gray-400 rounded-md w-80' placeholder='+ Nova Refeição' />
+                } onChange={
+                    (e) => {
+                        setNewItem(e.target.value);
+                    }
+                } type="text" name={tipo} id={tipo} className='border border-gray-400 rounded-md w-80' placeholder='+ Nova Refeição' />
                 <button type="submit" className='bg-green-500 text-white rounded-xl p-2 w-80 h-14' onClick={
                     () => {
-                        add_item(items[0].type)
+                        add_item(tipo)
                     }
                 }>Cadastrar</button>
-                <div className={"alreadyRegister gap-4 flex flex-col-reverse py-6 justify-start " + items[0].type}>
+                <div className={"alreadyRegister gap-4 flex flex-col-reverse py-6 justify-start " + tipo}>
+
                     {
                         items.map(item => {
                             return (
-                                <RecipeDelete key={item.id} item={item} />
+                                <div key={item.id} >
+                                    <RecipeDelete key={item.id} item={item} />
+                                </div>
                             )
                         })
                     }

@@ -1,4 +1,4 @@
-@media screen and (max-width: 1024) {
+@media screen and (max-width: 1024px) {
     .navContainer {
         display: fixed;
         top: 0;

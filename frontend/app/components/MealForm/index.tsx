@@ -6,15 +6,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './style.css';
 
 
-interface recipe {
+interface Item {
     id: number,
-    name: string,
-    type: string
+    nome_refeicao: string,
+    tipo_refeicao: string
 }
 
 const MealForm = (
-    { meal, regular_recipes, veg_recipes, follow_ups }: {
-        meal: string, regular_recipes: recipe[], veg_recipes: recipe[], follow_ups: recipe[]
+    { meal, regular_recipes, veg_recipes, follow_ups, listenners }: {
+        meal: string, regular_recipes: Item[], veg_recipes: Item[], follow_ups: Item[], listenners: any
     }
 ) => {
     const title = meal;
@@ -24,23 +24,23 @@ const MealForm = (
         const input = document.querySelector(`#${meal}`) as HTMLInputElement;
         const value = input.value;
         if (value) {
-            const item: recipe = {
+            const item: Item = {
                 id: follow_ups[follow_ups.length - 1].id + 1,
-                name: value,
-                type: 'follow-up',
+                nome_refeicao: value,
+                tipo_refeicao: 'follow-up',
             };
             follow_ups.push(item);
             input.value = '';
             const alreadyRegisterElement = document.querySelector(`.${meal}-follow-ups`);
             if (alreadyRegisterElement) {
                 let div = document.createElement('div');
-                div.id = item.type + item.id;
+                div.id = item.tipo_refeicao + item.id;
                 div.className = 'flex flex-row gap-2 items-center';
                 div.innerHTML =
                     `
-                        <input type="checkbox" name=${item.name + item.id} id=${item.name + meal} class='w-6 h-6' />
-                        <label htmlFor=${item.name + meal} class='text-lg'>
-                            ${item.name}
+                        <input type="checkbox" name=${item.nome_refeicao + item.id} id=${item.nome_refeicao + meal} class='w-6 h-6' />
+                        <label htmlFor=${item.nome_refeicao + meal} class='text-lg'>
+                            ${item.nome_refeicao}
                         </label>
                     `
                 alreadyRegisterElement.appendChild(div);
@@ -57,13 +57,13 @@ const MealForm = (
                         <p className='text-center text-xl'>
                             Refeição Geral
                         </p>
-                        <select name="reg-meal" id="reg-meal" className='h-16 px-4 w-60' placeholder='Refeição Normal'>
+                        <select name="reg-meal" id="reg-meal" className='h-16 px-4 w-60' placeholder='Refeição Normal' onChange={(e) => listenners[0][1](e.target.value)}>
                             <option value="">Esolha uma opção</option>
                             {
                                 regular_recipes.map(item => {
-                                    if (item.type === 'normal-recipe') {
+                                    if (item.tipo_refeicao === 'N') {
                                         return (
-                                            <option value={item.id} key={'ref' + item.id}>{item.name}</option>
+                                            <option value={item.id} key={'ref' + item.id}>{item.nome_refeicao}</option>
                                         )
                                     }
                                 })
@@ -74,13 +74,13 @@ const MealForm = (
                         <p className='text-center text-xl'>
                             Refeição Vegetariana
                         </p>
-                        <select name="veg-meal" id="veg-meal" className='h-16 px-4 w-60' placeholder='Refeição Vegetariana'>
+                        <select name="veg-meal" id="veg-meal" className='h-16 px-4 w-60' placeholder='Refeição Vegetariana' onChange={(e) => listenners[1][1](e.target.value)}>
                             <option value="">Esolha uma opção</option>
                             {
                                 veg_recipes.map(item => {
-                                    if (item.type === 'veg-recipe') {
+                                    if (item.tipo_refeicao === 'V') {
                                         return (
-                                            <option value={item.id} key={'ref_veg' + item.id}>{item.name}</option>
+                                            <option value={item.id} key={'ref_veg' + item.id}>{item.nome_refeicao}</option>
                                         )
                                     }
                                 })
@@ -95,12 +95,20 @@ const MealForm = (
                 <div className={'grid md:grid-cols-3 max-md:grid-cols-2 gap-4  ' + meal + '-follow-ups'}>
                     {
                         follow_ups.map(item => {
-                            if (item.type === 'follow-up') {
+                            if (item.tipo_refeicao === 'A') {
                                 return (
                                     <div key={item.id} className='flex flex-row gap-2 items-center ' >
-                                        <input type="checkbox" name={item.name + item.id} id={item.name + meal} className='w-6 h-6' />
-                                        <label htmlFor={item.name + meal} className='text-lg'>
-                                            {item.name}
+                                        <input type="checkbox" name={item.nome_refeicao + item.id} id={item.nome_refeicao + meal} className='w-6 h-6' onChange={
+                                            (e) => {
+                                                if (e.target.checked) {
+                                                    listenners[2][1]([...listenners[2][0], item]);
+                                                } else {
+                                                    listenners[2][1](listenners[2][0].filter((element: Item) => element.id !== item.id));
+                                                }
+                                            }
+                                        } />
+                                        <label htmlFor={item.nome_refeicao + meal} className='text-lg'>
+                                            {item.nome_refeicao}
                                         </label>
                                     </div>
                                 )
