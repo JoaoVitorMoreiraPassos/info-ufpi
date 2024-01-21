@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { use } from 'react';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { format } from 'date-fns-tz';
@@ -7,36 +7,129 @@ import 'moment/locale/pt-br';
 import moment from 'moment';
 import './style.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
+import { faPaperPlane, faUser, faUserAlt } from '@fortawesome/free-solid-svg-icons';
+import UserApi from '@/app/api/user';
+import PostApi from '@/app/api/post';
+
+
+
+interface Profile {
+    id: number,
+    first_name: string,
+    last_name: string,
+    username: string,
+    email: string,
+    foto_perfil: string,
+    post_permissoes: boolean,
+}
 
 interface Noticia {
-    titulo: string;
-    descricao: string;
-    image: string;
-    data: string;
-    autor: string;
-    categoria: string;
-    autor_image: string;
+    id: number;
+    titulo_post: string;
+    autor_post: number;
+    autor_post_nome: string;
+    autor_imagem_post: string;
+    conteudo_post: string;
+    criacao: string;
+    imagem_post: string;
+    comentarios: [number];
+}
+
+interface Comentario {
+    id: number;
+    post_comentario: number;
+    autor_comentario: number;
+    autor_comentario_nome: string;
+    imagem_autor_comentario: string;
+    conteudo_comentario: string;
+    criacao: string;
 }
 
 const NoticeContent = ({ slug }: { slug: string }) => {
 
-    const noticia = async () => {
-        const response: Noticia = await fetch('http://localhost:3333/noticias/' + slug).then(response => response.json())
-        return response;
-    }
-    noticia.data = "2023-12-17 17:30:00";
-
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
+    const [image, setImage] = useState('');
+    const [data, setData] = useState('');
+    const [autor, setAutor] = useState('');
+    const [autor_image, setAutor_image] = useState('');
     const [timePassed, setTimePassed] = useState('');
+    const [commentIds, setCommentsIds] = useState<Array<number>>([]);
+    const [comments, setComments] = useState<Array<Comentario>>([]);
+    const [comment, setComment] = useState('');
+    const [user, setUser] = useState<string>();
+    const [user_image, setUserImage] = useState<string>("");
+
+    useEffect(() => {
+        const getNoticia = async () => {
+            try {
+                if (!slug) return;
+                const response: Noticia = await PostApi.GetPost(parseInt(slug[0]));
+                if (!response) {
+                    console.log("Notícia não encontrada");
+                    return;
+                }
+                setTitle(response.titulo_post);
+                setDescription(response.conteudo_post);
+                setImage(response?.imagem_post);
+                setData(response.criacao);
+                setAutor(response.autor_post_nome);
+                setAutor_image(response?.autor_imagem_post);
+                setCommentsIds(response.comentarios);
+            }
+            catch (error: any) {
+                console.log(error)
+            }
+        }
+        const getLoggedUser = async () => {
+            if (!localStorage.getItem('access')) return;
+            if (!localStorage.getItem('refresh')) return;
+            try {
+                const response: Profile | undefined = await UserApi.GetLoggedUser();
+                if (!response) return;
+                setUser(response.username);
+                setUserImage(response.foto_perfil);
+            }
+            catch (error: any) {
+                if (error.response.status === 401) {
+                    alert('Sua sessão expirou, faça login novamente');
+                    return;
+                }
+            }
+        }
+        getNoticia()
+        getLoggedUser();
+    }, [slug]);
+
+    useEffect(() => {
+        const getComments = async () => {
+            try {
+                if (!slug) return;
+                const id = parseInt(slug[0]);
+                const response = await PostApi.ListComments(id);
+                setComments(response)
+                console.log(comments)
+            }
+            catch (error) {
+                console.log(error);
+            }
+        }
+        getComments()
+    }, [commentIds, slug, comments]);
+    useEffect(() => {
+        document.title = title;
+    }, [title, comments]);
 
     useEffect(() => {
         const brazilianTimeZone = 'America/Sao_Paulo';
 
         const calculateTimePassed = () => {
+            if (!data) return;
+            if (data === '') return;
             const currentDate = moment(format(new Date(), 'yyyy-MM-dd HH:mm:ss', {
                 timeZone: brazilianTimeZone,
             }));
-            const receivedDate = moment(noticia.data);
+            const receivedDate = moment(data);
 
             const duration = moment.duration(currentDate.diff(receivedDate));
             const formattedTimePassed = duration.humanize();
@@ -45,19 +138,54 @@ const NoticeContent = ({ slug }: { slug: string }) => {
         };
 
         calculateTimePassed();
-    }, [noticia.data]);
-    noticia.image = "/image 1.png";
-    noticia.autor_image = "/ru/ru perfil.png";
-    noticia.autor = "Restaurante Universitário";
+    }, [data]);
+
+    const handleComment = async () => {
+        try {
+            const user = await UserApi.GetLoggedUser();
+            if (!user) {
+                document.location.href = '/autenticao/login';
+                return;
+            }
+            const post_id = parseInt(slug[0]);
+            const response: Comentario = await PostApi.CreateComment(post_id, comment, user.id);
+            // Criar elemento de comentário
+            setComment('');
+
+            const newComment = {
+                id: response.id,
+                post_comentario: response.post_comentario,
+                autor_comentario: response.id,
+                autor_comentario_nome: response.autor_comentario_nome,
+                imagem_autor_comentario: response.imagem_autor_comentario,
+                conteudo_comentario: comment,
+                criacao: response.criacao,
+            };
+            console.log(newComment)
+            setComments((comments) => [...comments, newComment]);
+        }
+        catch (error: any) {
+            console.log(error);
+            if (error.response.status === 401) {
+                alert('Você precisa estar logado para comentar');
+                return;
+            }
+        }
+    }
 
     return (
         <div className=' mainContainer flex flex-col justify-start items-center gap-4 p-4 pt-10 max-sm:p-0'>
-
-            <div className=' flex flex-row justify-start items-center gap-2 p-2 w-3/4 max-sm:w-full max-sm:p-1'>
-                <Image src='/ru/ru perfil.png' className="rounded-full w-10 h-10 z-10 " width={40} height={40} alt="profile" />
+            <div className=' flex flex-row justify-start items-center gap-2 p-2 w-1/2 max-sm:w-full max-sm:p-1'>
+                {
+                    !autor_image ? (
+                        <FontAwesomeIcon icon={faUserAlt} className="rounded-full w-4 h-4 p-2 z-10 shadow-sm border-2" width={40} height={40} />
+                    ) : (
+                        <Image src={autor_image} className="rounded-full w-10 h-10 z-10 " width={40} height={40} alt="profile" />
+                    )
+                }
                 <div className='flex-col flex '>
                     <p className='text-xl font-bold'>
-                        {noticia.autor}
+                        {autor ? autor : "Nome do usuário"}
                     </p>
                     <p>
                         Postado há {
@@ -66,43 +194,90 @@ const NoticeContent = ({ slug }: { slug: string }) => {
                     </p>
                 </div>
             </div>
-            <div className='flex flex-col justify-start items-center  w-3/4 max-sm:w-full max-sm:p-0'>
-                <Image src={noticia.image} width={1000} height={1000} alt={noticia.autor} className='rounded-lg w-auto h-auto' />
+            <div className='flex flex-col justify-start items-center  w-1/2 max-sm:w-full max-sm:p-0'>
+                {
+                    !image ? (
+                        <div className='flex justify-center items-center w-full h-80 bg-slate-300 rounded-lg'>
+                            <p className='text-2xl font-bold text-slate-100'>
+                                Sem imagem
+                            </p>
+                        </div>
+                    ) : (
+                        <Image src={image} width={1000} height={1000} alt="" className='rounded-lg w-full aspect-video' />
+                    )
+                }
             </div>
-            <div className='flex flex-col justify-start items-start gap-4 p-2 w-3/4 max-sm:w-full max-sm:p-2'>
+            <div className='flex flex-col justify-start items-start gap-4 p-2 w-1/2 max-sm:w-full max-sm:p-2'>
                 <p className='text-x font-bold text-justify text-black'>
-                    O Curso de Sistemas de Informação, da Universidade Federal do Piauí, Campus Senador Helvídio Nunes de Barros, recebeu na terça-feira, dia 31 de outubro, a visita de alunos do oitavo, nono e primeiro ano dos ensinos: fundamental e médio, respectivamente, da Escola Estadual Terezinha Nunes. A visita teve como objetivo apresentar aos alunos o curso de Sistemas de Informação, bem como o mercado de trabalho e as áreas de atuação do profissional formado em Sistemas de Informação.
+                    {description}
                 </p>
             </div>
 
-            <div className="flex flex-col justify-start items-start w-3/4 mt-6 mb-12 max-sm:w-full max-sm:p-1 gap-2">
+            <div className="flex flex-col justify-start items-start w-1/2 mt-6 mb-12 max-sm:w-full max-sm:p-1 gap-2">
                 <p className='text-2xl font-bold w-'>
                     Comentários
                 </p>
                 <div className='commentContainer flex flex-row justify-start items-center gap-2 p-2 w-full'>
-                    <Image src='/ru/ru perfil.png' className="rounded-full w-16 h-16 z-10" width={60} height={60} alt="profile" />
+                    {
+                        !user_image ? (
+                            <FontAwesomeIcon icon={faUserAlt} className="rounded-full w-4 h-4 p-2 z-10 shadow-sm border-2" width={40} height={40} />
+                        ) : (
+                            <Image src={user_image} className="rounded-full w-10 h-10 z-10 " width={40} height={40} alt="profile" />
+                        )
+                    }
                     <div className='flex-col flex w-full justify-end'>
                         <p className='font-bold'>
-                            {noticia.autor}
+                            {user ? user : "Desconhecido"}
                         </p>
                         <div className='relative w-full h-auto flex flex-row'>
-                            <input type="text" name="comment" id="comment" placeholder='Adicione um comentário' className='p-0' />
-                            <button className='text-blue-500 w-10 h-10'><FontAwesomeIcon icon={faPaperPlane} /></button>
+                            <input value={comment} type="text" name="comment" id="comment" placeholder='Adicione um comentário' className='p-0'
+                                onChange={(e) => setComment(e.target.value)} onKeyDownCapture={
+                                    (e) => {
+                                        if (e.key === 'Enter') {
+                                            handleComment();
+                                        }
+                                    }
+                                } />
+                            <button className='text-blue-500 w-10 h-10'
+                                onClick={handleComment}
+                            ><FontAwesomeIcon icon={faPaperPlane} /></button>
                         </div>
                     </div>
                 </div>
-                <div>
-                    <div className='commentContainer flex flex-row justify-start items-center gap-2 p-2 w-full'>
-                        <Image src='/ru/ru perfil.png' className="rounded-full w-16 h-16 z-10" width={60} height={60} alt="profile" />
-                        <div className='flex-col flex w-full justify-end'>
-                            <p className='font-bold'>
-                                {noticia.autor}
-                            </p>
-                            <p className='text-justify'>
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatibus. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatibus.
-                            </p>
-                        </div>
-                    </div>
+                <div className='w-full'>
+                    {
+                        comments.map((comment) => {
+                            console.log(comment)
+                            return (
+
+                                <div className='commentContainer flex flex-row justify-start items-center gap-2 p-2 w-full mb-1' key={comment.id}>
+                                    {
+                                        !comment?.imagem_autor_comentario ? (
+                                            <FontAwesomeIcon icon={faUserAlt} className="rounded-full w-3 h-3 text-md p-1  z-10 shadow-sm border-2" width={40} height={40} />
+                                        ) : (
+                                            <Image src={comment.imagem_autor_comentario} className="rounded-full w-6 h-6 z-10 " width={40} height={40} alt="profile" />
+                                        )
+                                    }
+                                    <div className='flex-col flex w-full justify-end'>
+                                        <p className='font-bold'>
+                                            {
+                                                comment.autor_comentario_nome == user ? (
+                                                    <p className='font-bold'>
+                                                        Você
+                                                    </p>
+                                                ) : (
+                                                    comment.autor_comentario_nome
+                                                )
+                                            }
+                                        </p>
+                                        <p className='text-justify'>
+                                            {comment.conteudo_comentario}
+                                        </p>
+                                    </div>
+                                </div>
+                            )
+                        })
+                    }
                 </div>
             </div>
         </div>
