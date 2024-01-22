@@ -3,7 +3,7 @@ import './style.css';
 import React from 'react';
 import Image from 'next/image';
 import UserApi from '@/app/api/user';
-import { ToastContainer, toast, toastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const RecuperarSenha = () => {

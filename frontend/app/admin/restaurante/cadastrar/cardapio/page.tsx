@@ -28,9 +28,7 @@ export default function CadastrarRefeicao() {
         const getUser = async () => {
             const response = await UserApi.GetLoggedUser();
             if (!response) window.location.href = '/';
-            if (response == null) return console.log('error');
-            if (response == undefined) return console.log('error');
-            if (!response.refeicao_permissoes) window.location.href = '/perfil';
+            if (!response?.refeicao_permissoes) window.location.href = '/perfil';
         }
         getUser()
     })
@@ -39,9 +37,7 @@ export default function CadastrarRefeicao() {
         document.title = 'Cadastrar Refeição'
         async function getAlimentos() {
             const response = await api.getAlimentos();
-            console.log(response)
             let items: Array<Item> = response.results;
-            console.log(items)
             const reg = items.filter((item) => item.tipo_refeicao === 'N');
             const veg = items.filter((item) => item.tipo_refeicao === 'V');
             const fol = items.filter((item) => item.tipo_refeicao === 'A');
@@ -57,12 +53,6 @@ export default function CadastrarRefeicao() {
         }
         getAlimentos();
     }, [])
-
-    useEffect(() => {
-        console.log(regularRecipes)
-        console.log(vegRecipes)
-        console.log(followUps)
-    }, [regularRecipes, vegRecipes, followUps])
 
     return (
         <div>
