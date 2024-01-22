@@ -6,7 +6,7 @@ from rest_framework_simplejwt.views import (
     TokenVerifyView,
 )
 
-from .views import CadastrarAPIView, UserDetailAPIView, UserPhotoUpdateAPIView, UserUpdateAPIView, SearchUserAPIView, SearchUsersAPIView
+from .views import CadastrarAPIView, UserDetailAPIView, UserUpdateAPIView, SearchUserAPIView, SearchUsersAPIView
 
 
 
