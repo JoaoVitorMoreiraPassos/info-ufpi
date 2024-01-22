@@ -1,6 +1,5 @@
 import axios from 'axios'
-
-
+import host from './host'
 interface Profile {
     id: number,
     first_name: string,
@@ -12,13 +11,16 @@ interface Profile {
     refeicao_permissoes: boolean
 }
 
+
+
 class User {
+
     route() {
-        return "http://192.168.1.3:8000/api/v1/";
+        return host + "api/v1/";
     }
 
     token_route() {
-        return "http://192.168.1.3:8000/api/v1/token/";
+        return host + "api/v1/token/";
     }
 
     async Login(username: string, password: string) {
