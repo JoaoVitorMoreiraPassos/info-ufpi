@@ -8,6 +8,10 @@ module.exports = {
                 protocol: 'http',
                 hostname: 'localhost',
             },
+            {
+                protocol: 'http',
+                hostname: '192.168.1.3',
+            },
         ]
     },
 }
