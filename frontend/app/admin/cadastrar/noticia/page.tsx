@@ -9,6 +9,7 @@ import './style.css';
 import { useState, useEffect } from 'react';
 import NoticeForm from '@/app/components/NoticeForm';
 import UserApi from '@/app/api/user';
+import { toast, ToastContainer } from 'react-toastify';
 
 
 const CadastrarNoticia = () => {

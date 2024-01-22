@@ -73,13 +73,12 @@ const Perfil = () => {
                 setProfile(user);
             }
             catch {
-                console.log("Erro ao buscar usuario");
+
             }
         }
         const getFavoritos = async () => {
             try {
                 const favoritos: Favorito = await PostApi.ListFavoritePosts();
-                console.log(favoritos);
                 if (!favoritos) return;
                 if (favoritos?.count == 0) return;
 
@@ -89,12 +88,9 @@ const Perfil = () => {
                     if (!response) continue;
                     favoritosList.push(response);
                 }
-                console.log(favoritosList)
                 setFavoritos(favoritosList);
             }
             catch (err) {
-                console.log(err)
-                console.log("Erro ao buscar favoritos");
             }
         }
 
@@ -141,13 +137,14 @@ const Perfil = () => {
                                 </Link>
                             </div>
                         </div>
+                        <h1 className='text-black text-xl pl-14 pt-14 w-full max-[768px]:flex max-[768px]:justify-center max-[768px]:pl-0'>Seus Favoritos:</h1>
                         {
                             favoritos.length > 0 ? (
-                                <div className='cardsContainer flex w-full flex-row flex-wrap p-14 justify-center items-start gap-10'>
+                                <div data-carousel="slide" className=' modal-scroll carousel flex w-full flex-row px-2 pb-14 ml-3 mr-3 justify-start items-start gap-10 overflow-scroll'>
                                     {
                                         favoritos.map((notice, index) => {
                                             return (
-                                                <NoticeCardPerfil notice_infos={notice} key={'notice' + index} />
+                                                <NoticeCardPerfil notice_infos={notice} key={'notice' + index} self_profile={true} />
                                             )
                                         })
                                     }
