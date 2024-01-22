@@ -1,6 +1,7 @@
 import axios from 'axios'
 import UserApi from './user';
 import { Id } from 'react-toastify';
+import host from './host';
 
 interface Noticia {
     id: number;
@@ -59,14 +60,14 @@ interface Favorito {
     }
 
 }
-
 class Post {
+
     route() {
-        return "http://192.168.1.3:8000/api/v1/posts/";
+        return host + "api/v1/posts/";
     }
 
     favorite_route() {
-        return "http://192.168.1.3:8000/api/v1/favoritos/";
+        return host + "api/v1/favoritos/";
     }
 
     async ListPost() {

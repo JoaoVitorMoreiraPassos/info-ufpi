@@ -19,6 +19,7 @@
     border: none;
     background: #fff;
     border-radius: 0;
+    padding-right: 0;
 }
 
 #search_users_id:focus {

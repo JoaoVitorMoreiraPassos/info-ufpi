@@ -1,4 +1,7 @@
 import axios from 'axios';
+import dotenv from 'dotenv';
+import host from './host';
+
 
 interface Alimento {
     id: number;
@@ -26,10 +29,10 @@ interface Alimentos {
 
 class RUAPI {
     alimento_route = () => {
-        return "http://192.168.1.3:8000/api/v1/alimentos/"
+        return host + "api/v1/alimentos/"
     }
     cardapio_route = () => {
-        return "http://192.168.1.3:8000/api/v1/cardapios/"
+        return host + "api/v1/cardapios/"
     }
 
     async getAlimento(id: number) {

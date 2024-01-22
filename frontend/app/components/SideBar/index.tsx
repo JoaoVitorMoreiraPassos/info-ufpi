@@ -1,3 +1,4 @@
+
 'use client'
 import React from 'react'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -87,7 +88,7 @@ const SideBar = () => {
                             onBlur={() =>
                                 setTimeout(() => {
                                     setIsOnSearch(false);
-                                }, 200)}
+                                }, 500)}
                         />
 
                     </li>

@@ -68,7 +68,7 @@ export const Auth = () => {
                                         </Link>
                                     </div>
                                     <div className='cursor-pointer bottom-8 right-2 h-10 w-full bg-blue-500 flex justify-center items-center rounded-xl'>
-                                        <Link href='/admin/restaurante/cadastrar/refeicao/'>
+                                        <Link href='/admin/restaurante/cadastrar/alimento/'>
                                             Nova Refeição
                                         </Link>
                                     </div>
