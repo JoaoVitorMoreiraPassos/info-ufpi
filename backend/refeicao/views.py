@@ -52,7 +52,7 @@ class CardapiosAPIView(generics.ListCreateAPIView):
         return super().create(request, *args, **kwargs)
 
 
-class CardapioAPIView(generics.RetrieveDestroyAPIView):
+class CardapioAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Cardapio.objects.all()
     serializer_class = CardapioSerializer
     permission_classes = [HasRefeicaoPermissions, ]
