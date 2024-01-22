@@ -23,16 +23,18 @@ interface Noticia {
     comentarios: [number];
 };
 
-const NoticeCardPerfil = ({ notice_infos }: { notice_infos: Noticia }) => {
+const NoticeCardPerfil = ({ notice_infos, self_profile }: { notice_infos: Noticia, self_profile: boolean }) => {
     const cardStyle = {
         fontFamily: 'Inria Serif',
         backgroundColor: '#4985ADCC',
         minWidth: '300px',
         width: '500px',
         color: 'white',
+        height: '100%',
+        overflow: 'hidden',
     }
     const [timePassed, setTimePassed] = useState('');
-    const [isFavorite, setIsFavorite] = useState<boolean>(true);
+    const [isFavorite, setIsFavorite] = useState<boolean>(self_profile);
     const [text, setText] = useState<string>('text-yellow-500');
 
     useEffect(() => {
@@ -65,8 +67,8 @@ const NoticeCardPerfil = ({ notice_infos }: { notice_infos: Noticia }) => {
     }, [notice_infos.criacao]);
 
     return (
-        <div className=' card flex justify-center items-start py-2 gap-4 w-14' style={cardStyle}>
-            <div className=' flex flex-row w-full gap-2 items-center justify-center px-4'>
+        <div className=' card flex justify-center items-start py-2 gap-4 h-full mr-5 overflow-hidden' style={cardStyle}>
+            <div className=' flex flex-row w-full gap-2 items-center justify-center px-4 overflow-hidden'>
                 {
                     notice_infos.autor_imagem_post == null ?
                         <FontAwesomeIcon className="rounded-full w-3 h- p-3 z-10 bg-slate-300 text-white text-sm" icon={faUserAlt} />
@@ -86,17 +88,32 @@ const NoticeCardPerfil = ({ notice_infos }: { notice_infos: Noticia }) => {
                 } onClick={
                     async () => {
                         if (isFavorite) {
-                            const response = await PostApi.DeleteFavoritePosts(notice_infos.id);
-                            if (!response) return console.log('error');
-                            if (response == null) return console.log('error');
-                            if (response == undefined) return console.log('error');
-                            setIsFavorite(false);
+                            try {
+                                const response = await PostApi.DeleteFavoritePosts(notice_infos.id);
+                                if (!response) return;
+                                if (response == null) return;
+                                if (response == undefined) return;
+                                setIsFavorite(false);
+                            }
+                            catch (error: any) {
+                                if (error.response.status === 401) {
+                                    window.location.href = '/autenticacao/login';
+                                    return;
+                                }
+                            }
                         } else {
-                            const response = await PostApi.CreateFavoritePosts(notice_infos.id);
-                            if (!response) return console.log('error');
-                            if (response == null) return console.log('error');
-                            if (response == undefined) return console.log('error');
-                            setIsFavorite(true);
+                            try {
+                                const response = await PostApi.CreateFavoritePosts(notice_infos.id);
+                                if (!response) return;
+                                if (response == null) return;
+                                if (response == undefined) return;
+                                setIsFavorite(true);
+                            } catch (error: any) {
+                                if (error.response.status === 401) {
+                                    window.location.href = '/autenticacao/login';
+                                    return;
+                                }
+                            }
                         }
                     }
                 } />
@@ -105,22 +122,22 @@ const NoticeCardPerfil = ({ notice_infos }: { notice_infos: Noticia }) => {
                 {
                     notice_infos.imagem_post == null ?
                         (
-                            <div className=' h-64 w-full bg-gray-400 rounded-lg flex items-center justify-center' >
+                            <div className=' h-40 w-full bg-gray-400 rounded-lg flex items-center justify-center' >
                                 <p className=' text-2xl text-center text-white'>
                                     Sem imagem
                                 </p>
                             </div>
                         ) : (
-                            <Image className=' h-64 w-full bg-gray-400 rounded-lg ' width={1000} height={1000} src={notice_infos.imagem_post} alt='profile' />
+                            <Image className=' h-40 w-full bg-gray-400 rounded-lg ' width={1000} height={1000} src={notice_infos.imagem_post} alt='profile' />
                         )
                 }
             </Link>
-            <Link className=' description' href={`/noticias/${notice_infos.id}`}>
-                <p className=' text-xl p-6 overflow-hidden'>
+            <Link className=' description overflow-hidden' href={`/noticias/${notice_infos.id}`}>
+                <p className=' text-md p-6 overflow-hidden text-ellipsis text-with-direction w-fit'>
                     {notice_infos.conteudo_post.substring(0, 100) + '...'}
                 </p>
             </Link>
-        </div>
+        </div >
     )
 }
 

@@ -35,17 +35,14 @@ const NavBar = ({ page_index: page_index }: { page_index: undefined | Number }) 
                         if (sideBar) {
                             sideBar.classList.add('open');
                             sideBar.classList.remove('hidden');
-                            console.log(mainContainer?.classList);
                             if (mainContainer?.classList) {
                                 mainContainer.classList.add('border-l');
                             }
-                            console.log(mainContainer?.classList);
                         };
                         if (hamburguerMenu) {
                             hamburguerMenu.classList.add('hidden');
                             hamburguerMenu.classList.remove('flex');
                         };
-                        console.log('click')
                     }}>
                         <i><FontAwesomeIcon icon={faBars} /></i>
                     </button>

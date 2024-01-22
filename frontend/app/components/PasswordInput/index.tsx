@@ -11,7 +11,7 @@ interface PasswordInputProps {
   error?: string;
 }
 
-const PasswordInput: React.FC<PasswordInputProps> = ({ value, onChange, error, placeholder }: { value: string, onChange: (event: React.ChangeEvent<HTMLInputElement>) => void, error?: string, placeholder?: string | undefined }) => {
+const PasswordInput = ({ value, onChange, error, placeholder }: { value: string, onChange: (event: React.ChangeEvent<HTMLInputElement>) => void, error?: string, placeholder?: string | undefined }) => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [inputType, setInputType] = useState('password');
   const [eyeIcon, setEyeIcon] = useState(faEye);

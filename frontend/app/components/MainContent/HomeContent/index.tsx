@@ -55,75 +55,85 @@ export default function HomeContent() {
     const [favorites, setFavorites] = useState<Favorito[]>([])
     const [almoco, setAlmoco] = useState<Alimento[]>()
     const [jantar, setJantar] = useState<Alimento[]>()
+    const [next, setNext] = useState<string>('')
+
 
     useEffect(() => {
         const getCardapios = async () => {
-            const response = await api.getCardapio();
-            if (!response) return console.log('error');
-            if (response == null) return console.log('error');
-            if (response == undefined) return console.log('error');
-            if (response.results.length === 0) return console.log('error');
-            const cardapios: Cardapio[] = response.results;
-            // get today date in brazilian timezone
-            const brazilianTimeZone = 'America/Sao_Paulo';
+            try {
+                const response = await api.getCardapio();
+                if (response.results.length === 0) return;
+                const cardapios: Cardapio[] = response.results;
+                // get today date in brazilian timezone
+                const brazilianTimeZone = 'America/Sao_Paulo';
 
-            const currentDateTimeInBrazil = format(new Date(), 'yyyy-MM-dd', {
-                timeZone: brazilianTimeZone,
-            });
+                const currentDateTimeInBrazil = format(new Date(), 'yyyy-MM-dd', {
+                    timeZone: brazilianTimeZone,
+                });
 
-            let almoco = cardapios.filter((cardapio) => {
-                if (cardapio.tipo === 'A' && cardapio.data === currentDateTimeInBrazil) {
-                    return cardapio.alimentos;
+                let almoco = cardapios.filter((cardapio) => {
+                    if (cardapio.tipo === 'A' && cardapio.data === currentDateTimeInBrazil) {
+                        return cardapio.alimentos;
+                    }
+                });
+                let jantar = cardapios.filter((cardapio) => {
+                    if (cardapio.tipo === 'J' && cardapio.data === currentDateTimeInBrazil) {
+                        return cardapio.alimentos;
+                    }
+                });
+                let almoco_alimentos: Alimento[] = [];
+                let jantar_alimentos: Alimento[] = [];
+                for (let i in almoco[0].alimentos) {
+                    const response = await api.getAlimento(almoco[0]?.alimentos[i]);
+                    almoco_alimentos.push(response);
                 }
-            });
-            let jantar = cardapios.filter((cardapio) => {
-                if (cardapio.tipo === 'J' && cardapio.data === currentDateTimeInBrazil) {
-                    return cardapio.alimentos;
-                }
-            });
-            let almoco_alimentos: Alimento[] = [];
-            let jantar_alimentos: Alimento[] = [];
-            for (let i in almoco[0].alimentos) {
-                const response = await api.getAlimento(almoco[0]?.alimentos[i]);
-                if (!response) return console.log('error');
-                if (response == null) return console.log('error');
-                if (response == undefined) return console.log('error');
-                almoco_alimentos.push(response);
-            }
 
-            for (let i in jantar[0].alimentos) {
-                const response: Alimento = await api.getAlimento(jantar[0]?.alimentos[i]);
-                if (!response) return console.log('error');
-                if (response == null) return console.log('error');
-                if (response == undefined) return console.log('error');
-                jantar_alimentos.push(response);
+                for (let i in jantar[0].alimentos) {
+                    const response: Alimento = await api.getAlimento(jantar[0]?.alimentos[i]);
+                    if (!response) return;
+                    if (response == null) return;
+                    if (response == undefined) return;
+                    jantar_alimentos.push(response);
+                }
+                setAlmoco(almoco_alimentos);
+                setJantar(jantar_alimentos);
+            } catch (error: any) {
+                return;
             }
-            console.log(almoco_alimentos)
-            setAlmoco(almoco_alimentos);
-            setJantar(jantar_alimentos);
         }
         const getRecentNotices = async () => {
             let items: Notice[] = [];
-            let url = `http://localhost:8000/api/v1/posts/`;
-            while (true) {
-                const response = await fetch(url);
-                const data = await response.json();
-                items = items.concat(data.results);
-                url = '';
-                url = data.next;
-                if (data.next === null) {
-                    break;
+            try {
+                const response = await PostApi.ListPost();
+                if (!response) return;
+                if (response == null) return;
+                if (response == undefined) return;
+                const noticias: Notice[] = response.results;
+                setNext(response.next);
+                for (let i = 0; i < noticias.length; i++) {
+                    items.push(noticias[i]);
                 }
+            } catch (error: any) {
+                return;
             }
             setRecentNotices(items);
         }
         const get_favorites = async () => {
-            const response = await PostApi.ListFavoritePosts();
-            if (!response) return console.log('error');
-            if (response == null) return console.log('error');
-            if (response == undefined) return console.log('error');
-            const favoritos: Favorito[] = response.results;
-            setFavorites(favoritos);
+            try {
+                const response = await PostApi.ListFavoritePosts();
+                if (!response) return;
+                if (response == null) return;
+                if (response == undefined) return;
+                const favoritos: Favorito[] = response.results;
+                setFavorites(favoritos);
+            } catch (error: any) {
+                if (error.toString() == "Error: Token not found") {
+                    return;
+                }
+                else if (error.response.status === 401) {
+                    return;
+                }
+            }
         }
         const run = async () => {
             await Promise.all([getCardapios(), getRecentNotices(), get_favorites()]);
@@ -137,7 +147,7 @@ export default function HomeContent() {
     //     { "id": 3, "title": "Núcleo de assistencia estudantil", "image": "/nae.png", },
     // ]
     return (
-        <div className='flex-col p-6 mt-8 '>
+        <div className='flex-col p-6 max-[360px]:px-2 mt-8 '>
             {/* <div className='flex-col'>
                 <div>
                     <h1 className={' pb-4 text-xl ' + inter.className}>Em alta</h1>
@@ -246,14 +256,20 @@ export default function HomeContent() {
                     </div>
                 </div>
             }
-            <div className={'py-10 ' + inter.className}>
+            {
+                (almoco?.length ?? 0) === 0 && (jantar?.length ?? 0) === 0 &&
+                <div className='flex justify-center items-center w-full h-72'>
+                    <p className='text-2xl text-gray-600'>Não há cardápio para hoje</p>
+                </div>
+            }
+            <div className={'py-10 px-28 max-[700px]:px-2 max-[360px]:px-0 max-[360px]:w-full ' + inter.className}>
                 <div>
                     <h1 className=' text-xl'>
                         Noticias e eventos recentes
                     </h1>
                 </div>
                 {
-                    recentNotices.length === 0 && <p className=' text-xl'>Não há noticias recentes</p>
+                    recentNotices.length === 0 && <p className=' text-sm'>Não há noticias recentes</p>
                 }
                 {
                     recentNotices.length > 0 &&
@@ -269,6 +285,23 @@ export default function HomeContent() {
                                         </li>
                                     )
                                 })
+                            }
+                            {
+                                next &&
+                                <button onClick={() => {
+                                    PostApi.ListNextPost(next).then((response) => {
+                                        if (!response) return;
+                                        if (response == null) return;
+                                        if (response == undefined) return;
+                                        const noticias: Notice[] = response.results;
+                                        setNext(response.next);
+                                        let items: Notice[] = [];
+                                        for (let i = 0; i < noticias.length; i++) {
+                                            items.push(noticias[i]);
+                                        }
+                                        setRecentNotices([...recentNotices, ...items]);
+                                    })
+                                }} className='text-blue-500'>Carregar mais</button>
                             }
                         </ul>
                     </div>

@@ -5,6 +5,26 @@
     color: rgb(var(--font-color));
     transition: all 0.5s ease;
     overflow: hidden;
+    background: #fff;
+}
+
+
+#search_users_id {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    flex-wrap: nowrap;
+    overflow: hidden;
+    border: none;
+    background: #fff;
+    border-radius: 0;
+}
+
+#search_users_id:focus {
+    outline: none;
+    border-bottom: 1px solid rgb(19, 72, 145);
+    border-top: 1px solid rgb(19, 72, 145);
 }
 
 li {

@@ -8,7 +8,6 @@ const ContactContent = () => {
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log(email, message);
     }
 
     const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {

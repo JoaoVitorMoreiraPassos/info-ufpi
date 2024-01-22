@@ -6,7 +6,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import UserApi from '@/app/api/user';
 
 const NewPassordForm = ({ uid, token }: { uid: string, token: string }) => {
-    console.log(uid, token)
     const [password1, setPassword1] = useState('');
     const [password2, setPassword2] = useState('');
     const [usernameError, setUsernameError] = useState('');

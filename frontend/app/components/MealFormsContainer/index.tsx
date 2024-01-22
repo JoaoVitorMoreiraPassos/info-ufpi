@@ -41,19 +41,15 @@ const MealFormsContainer = ({ regular_recipes, veg_recipes, follow_ups }: { regu
 
     const Submit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log(date);
         if (almocoGeral && almocoVeg && almocoAcompanhamentos.length > 0 && jantarGeral && jantarVeg && jantarAcompanhamentos.length > 0) {
-            console.log(date);
 
             const sendCardapio = async (cardapio: cardapio) => {
                 try {
                     const response = await api.postCardapio(cardapio);
-                    console.log(response);
                     if (response.status === 201) {
                         toast.success(`${cardapio.tipo === 'A' ? 'Almoço' : 'Jantar'} cadastrado com sucesso!`);
                     }
                 } catch (error) {
-                    console.log(error);
                     return;
                 }
             }
