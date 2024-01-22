@@ -8,7 +8,7 @@ from .models import (
 
 @admin.register(Alimento)
 class AlimentoAdmin(admin.ModelAdmin):
-    list_display = ('id','nome_refeicao', 'tipo_refeicao', 'ativo')
+    list_display = ('id', 'nome_refeicao', 'tipo_refeicao', 'ativo')
     list_filter = ('tipo_refeicao', 'ativo')
     search_fields = ('nome_refeicao', 'tipo_refeicao', 'ativo')
 

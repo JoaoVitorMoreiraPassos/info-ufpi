@@ -1,5 +1,6 @@
-from rest_framework import generics
+from rest_framework import generics, status
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.response import Response
 
 from .models import (
     Alimento,
@@ -30,16 +31,25 @@ class AlimentoAPIView(generics.RetrieveDestroyAPIView):
     permission_classes = [HasRefeicaoPermissions, ]
 
 
-class CardapiosPagination(PageNumberPagination):
-    page_size = 1000
-
 class CardapiosAPIView(generics.ListCreateAPIView):
     queryset = Cardapio.objects.all()
     serializer_class = CardapioSerializer
     permission_classes = [HasRefeicaoPermissions, ]
+    pagination_class = None
 
     def get_queryset(self):
         return Cardapio.objects.filter(ativo=True)
+
+    def create(self, request, *args, **kwargs):
+        # Verificar se já existem dois Cardapios na mesma data
+        data = request.data.get('data')
+        if Cardapio.objects.filter(data=data).count() >= 2:
+            return Response(
+                {"message": "Já existem dois cardápios cadastrados para esta data."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        return super().create(request, *args, **kwargs)
 
 
 class CardapioAPIView(generics.RetrieveDestroyAPIView):

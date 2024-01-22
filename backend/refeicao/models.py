@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.core.exceptions import ValidationError
 
 class Base(models.Model):
     # criacao = models.DateTimeField(auto_now_add=True)
@@ -38,6 +38,12 @@ class Cardapio(Base):
     tipo = models.CharField(max_length=1, choices=CARDAPIO_TYPE, default='A')
     data = models.DateField(verbose_name='Data')
     alimentos = models.ManyToManyField(Alimento, related_name='cardapios')
+
+    def save(self, *args, **kwargs):
+        if not self.pk and Cardapio.objects.filter(data=self.data).count() >= 2:
+            raise ValidationError(
+                "Já existem dois cardápios cadastrados para esta data.")
+        super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = 'Cardapio'
