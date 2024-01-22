@@ -10,3 +10,13 @@ class User(AbstractUser):
     post_permissoes = models.BooleanField(default=False, verbose_name='Permissao de Postagem')
     refeicao_permissoes = models.BooleanField(default=False, verbose_name='Permissao de Refeicao')
 
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
+        if self.foto_perfil:
+            img = Image.open(self.foto_perfil.path)
+            if img.height > 250 or img.width > 250:
+                output_size = (250, 250)
+                img.thumbnail(output_size)
+                img.save(self.foto_perfil.path)
+
