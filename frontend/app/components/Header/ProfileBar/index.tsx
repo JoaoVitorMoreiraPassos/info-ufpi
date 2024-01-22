@@ -22,6 +22,16 @@ interface Profile {
 const ProfileBar = () => {
   const [username, setUser] = useState<string>("");
   const [user_image, setUserImage] = useState<string>("")
+  const [floatProfileActive, setFloatProfileActive] = useState<boolean>(false);
+
+  useEffect(() => {
+    window.addEventListener('click', (event) => {
+      if (event.target === document.querySelector('.usernameFloat')) {
+        setFloatProfileActive(false);
+      }
+    })
+  }, [])
+
   useEffect(() => {
     const getLoggedUser = async () => {
       if (!localStorage.getItem('access')) return;
@@ -43,21 +53,11 @@ const ProfileBar = () => {
     getLoggedUser();
   }, [])
   return (
-    <div>
+    <>
       <div className=' profile items-center justify-center overflow-hidden'>
         {username ? (
-          <Link href="/perfil" className='items-center justify-center mx-6 ' onMouseOver={() => {
-            let usernameFloat = document.querySelector('.usernameFloat');
-            if (usernameFloat) {
-              usernameFloat.classList.remove('hidden');
-            }
-          }} onMouseLeave={() => {
-            let usernameFloat = document.querySelector('.usernameFloat');
-            if (usernameFloat) {
-              usernameFloat.classList.add('hidden');
-            }
-          }}>
-            <div className='flex items-center justify-center'>
+          <div className='items-center justify-center mx-6 ' onClick={() => (setFloatProfileActive((isActive) => !isActive))} >
+            <div className='flex items-center justify-center cursor-pointer'>
               {
                 user_image === null ? (
                   <div className='flex flex-col gap-1 items-center justify-center'>
@@ -68,15 +68,33 @@ const ProfileBar = () => {
                 )
               }
             </div>
-          </Link>
+          </div>
         ) : (
           <Link href="/autenticacao/login" className='items-center justify-center mx-6'>{
             'Entrar/Cadastrar'
           }</Link>
         )}
-        <div className='usernameFloat hidden absolute top-20 transition-all right-4 bg-slate-100 text-slate-600 p-2 rounded-lg h-10 z-50'>
-          <p className='text-sm'>@{username}</p>
-        </div>
+        {floatProfileActive &&
+          <div className='usernameFloat  absolute top-20 transition-all right-0 bg-blue-400 text-white  rounded-lg h-auto z-50'>
+            <div className='text-sm flex items-center justify-center py-3  h-8 pt-6 pb-6 px-10'>
+              <p className='w-full flex justify-center items-center'>@{username}</p>
+
+            </div>
+            <div className='text-sm flex items-center justify-center py-3 cursor-pointer  h-8 pt-6 pb-6 px-10 border-t border-b border-white'>
+
+              <Link href={"/perfil/" + username} className='w-full flex justify-center items-center'>
+                Perfil
+              </Link>
+            </div>
+            <div className='text-sm flex items-center justify-center py-3 cursor-pointer  h-8 pt-6 pb-6 px-10'>
+
+              <p className='w-full flex justify-center items-center' onClick={() => {
+                localStorage.removeItem('access');
+                localStorage.removeItem('refresh');
+                window.location.href = '/';
+              }}>Sair</p>
+            </div>
+          </div>}
       </div>
 
       <div className='profileMob flex-row justify-center items-center w-full h-16 rounded-xl relative'>
@@ -86,38 +104,48 @@ const ProfileBar = () => {
           </Link>
         </div>
         {username ? (
-          <Link href="/perfil" className='items-center justify-center mx-6 absolute right-0'>
-            <div className='flex items-center justify-center' onMouseUp={() => {
-              let usernameFloat = document.querySelector('.usernameFloat');
-              if (usernameFloat) {
-                usernameFloat.classList.remove('hidden');
-              }
-            }}
-              onMouseLeave={() => {
-                let usernameFloat = document.querySelector('.usernameFloat');
-                if (usernameFloat) {
-                  usernameFloat.classList.add('hidden');
-                }
-              }}
-            >
+          <div className='items-center justify-center mx-6 absolute right-0' onClick={() => (setFloatProfileActive((isActive) => !isActive))}>
+            <div className='flex items-center justify-center' >
               {
-                user_image === null ? (
-                  <div className='flex flex-col gap-1 items-center justify-center'>
-                    <FontAwesomeIcon icon={faUser} className=' text-slate-100 h-6 w-6 bg-slate-300 p-2 rounded-full' />
-                    {/* <p className=' text-sm '>@{username}</p> */}
-                  </div>
-                ) : (
-                  <Image src={user_image} alt={username} width={50} height={50} className=' w-10 h-10 rounded-full aspect-square' />
-                )
+                user_image === null &&
+                <div className='flex flex-col gap-1 items-center justify-center'>
+                  <FontAwesomeIcon icon={faUser} className=' text-slate-100 h-6 w-6 bg-slate-300 p-2 rounded-full' />
+                </div>
+              }
+              {
+                user_image !== null &&
+                <Image src={user_image} alt={username} width={40} height={40} className=' rounded-full aspect-square' />
               }
             </div>
-          </Link>
+          </div>
         ) : (
           <Link href="/autenticacao/login" className='items-center  justify-end mx-6 ml-auto absolute right-0'>
             <FontAwesomeIcon icon={faUser} />
           </Link>)}
+
+        {floatProfileActive &&
+          <div className='usernameFloat  absolute top-16 right-0 bg-blue-400 text-white rounded-lg  z-50'>
+            <div className='text-sm flex items-center justify-center py-3 h-8 pt-6 pb-6 px-10'>
+              <p className='w-full flex justify-center items-center'>@{username}</p>
+
+            </div>
+            <div className='text-sm flex items-center justify-center py-3 h-8 pt-6 pb-6 px-10 border-t border-b border-white'>
+
+              <Link href={"/perfil/" + username} className='w-full flex justify-center items-center'>
+                Perfil
+              </Link>
+            </div>
+            <div className='text-sm flex items-center justify-center py-3 h-8 pt-6 pb-6 px-10'>
+
+              <p className='w-full flex justify-center items-center' onClick={() => {
+                localStorage.removeItem('access');
+                localStorage.removeItem('refresh');
+                window.location.href = '/';
+              }}>Sair</p>
+            </div>
+          </div>}
       </div >
-    </div>
+    </>
   )
 }
 

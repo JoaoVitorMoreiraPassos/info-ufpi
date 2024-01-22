@@ -28,8 +28,6 @@ const NoticeForm = () => {
             setDescription(value);
             setDescriptionError(false);
         }
-
-
     }
 
     const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -58,12 +56,13 @@ const NoticeForm = () => {
 
         try {
             const response = await PostApi.CreatePost(title, description, image)
-            console.log(response);
+            if (response) {
+                window.location.href = '/';
+            }
         } catch (err) {
             console.log(err);
         }
     }
-
 
     return (
         <div>
@@ -112,7 +111,6 @@ const NoticeForm = () => {
                                     setImage(fileInput.files[0]);
                                     setPreview(URL.createObjectURL(fileInput.files[0]));
                                     setImageError(false);
-                                    console.log(fileInput.files[0]);
                                 }
                             }}
                         >

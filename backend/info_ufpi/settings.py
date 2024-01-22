@@ -27,7 +27,7 @@ SECRET_KEY = "django-insecure-p71l=al!g6&gq0t7&ehsg2l4ep2g2@yiewm=53r^7b$x6oqafd
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 AUTH_USER_MODEL = "accounts.User"
 
@@ -182,8 +182,9 @@ SIMPLE_JWT = {
 
 # DJOSER
 
+
 DJOSER = {
-    "PASSWORD_RESET_CONFIRM_URL": "dayan/lindo/vai/te/ajudar/{uid}/{token}",
+    "PASSWORD_RESET_CONFIRM_URL": "confirmar-nova-senha/{uid}/{token}",
     'SEND_ACTIVATION_EMAIL': True,
     'SEND_CONFIRMATION_EMAIL': True,
     'SET_PASSWORD_RETYPE': True,
@@ -197,10 +198,10 @@ DJOSER = {
 # }
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-
+DOMAIN = 'localhost:3000'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'joseegidio11@gmail.com'
-EMAIL_HOST_PASSWORD = ''
+EMAIL_HOST_PASSWORD = 'ewhq zykm sxnq jgdr'
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

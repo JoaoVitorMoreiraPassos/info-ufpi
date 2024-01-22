@@ -9,17 +9,14 @@ import './style.css';
 import { useState, useEffect } from 'react';
 import NoticeForm from '@/app/components/NoticeForm';
 import UserApi from '@/app/api/user';
+import { toast, ToastContainer } from 'react-toastify';
 
 
 const CadastrarNoticia = () => {
     useEffect(() => {
         const getUser = async () => {
-            console.log('teste')
             const response = await UserApi.GetLoggedUser();
             if (!response) window.location.href = '/';
-            if (response == null) return console.log('error');
-            if (response == undefined) return console.log('error');
-            if (!response.post_permissoes) window.location.href = '/perfil';
         }
         getUser()
     })

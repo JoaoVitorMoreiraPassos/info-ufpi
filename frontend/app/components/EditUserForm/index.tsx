@@ -20,13 +20,13 @@ export const EditUserForm = () => {
         const getUser = async () => {
             const response = await UserApi.GetLoggedUser();
             if (!response) window.location.href = '/autenticacao/login';
-            if (response == null) return console.log('error');
-            if (response == undefined) return console.log('error');
-            setFirstName(response.first_name);
-            setLastName(response.last_name);
-            setUsername(response.username);
-            setEmail(response.email);
-            setPreview(response.foto_perfil);
+            if (response) {
+                setFirstName(response.first_name);
+                setLastName(response.last_name);
+                setUsername(response.username);
+                setEmail(response.email);
+                setPreview(response.foto_perfil);
+            }
         }
         getUser();
     }, []);
@@ -73,8 +73,7 @@ export const EditUserForm = () => {
             try {
                 const response = await UserApi.UpdateUser(firstName, lastName, username, email, image);
                 if (!response) return;
-                if (response == null) return console.log('error');
-                if (response == undefined) return console.log('error');
+
                 if (response.status === 200) {
                     toast.success('Atualização efetuada com sucesso!')
 
@@ -130,7 +129,6 @@ export const EditUserForm = () => {
                             setImage(fileInput.files[0]);
                             setPreview(URL.createObjectURL(fileInput.files[0]));
                             setImageError(false);
-                            console.log(fileInput.files[0]);
                         }
                     }}
                 >

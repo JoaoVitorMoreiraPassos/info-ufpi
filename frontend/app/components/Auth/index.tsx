@@ -2,7 +2,7 @@
 import React from 'react';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faCancel, faPlus, faXmark } from '@fortawesome/free-solid-svg-icons';
 import UserApi from '@/app/api/user';
 import { create } from 'domain';
 import Link from 'next/link';
@@ -14,12 +14,19 @@ export const Auth = () => {
 
     React.useEffect(() => {
         let getUser = async () => {
-            const user = await UserApi.GetLoggedUser();
-            if (user) {
-                setCreatePosts(user.post_permissoes);
+            try {
+                const user = await UserApi.GetLoggedUser();
+                if (user) {
+                    setCreatePosts(user.post_permissoes);
+                }
+                if (user) {
+                    setCreateRefs(user.refeicao_permissoes);
+                }
             }
-            if (user) {
-                setCreateRefs(user.refeicao_permissoes);
+            catch (error) {
+                if (error == "Refresh Token não encontrado") {
+                    return;
+                }
             }
         }
         getUser();
@@ -27,11 +34,14 @@ export const Auth = () => {
 
     return (
         <div>
-
             {
                 createPost || createRefs ? (
-                    <div onClick={() => setFloatIsOpen((estado) => !estado)} className='cursor-pointer fixed bottom-2 right-2 h-14 w-14 rounded-full bg-blue-500 flex justify-center items-center'>
-                        <FontAwesomeIcon icon={faPlus} className=' text-white w-3/4 h-3/4' />
+                    <div onClick={(e) => {
+                        setFloatIsOpen((estado) => !estado)
+                        // rotacionar o botão
+                        e.currentTarget.classList.toggle('rotate-45')
+                    }} className='cursor-pointer fixed bottom-2 right-2 h-14 w-14 rounded-full bg-blue-500 flex justify-center items-center transition-all duration-200 z-50'>
+                        <FontAwesomeIcon icon={faPlus} className=' text-white w-3/4 h-3/4 transition-all duration-500' />
                     </div>
                 ) : (
                     <></>
@@ -39,9 +49,7 @@ export const Auth = () => {
             }
             {
                 floatIsOpen && (
-                    <div onClick={() => {
-                        setFloatIsOpen(false);
-                    }} className='fixed bottom-0 right-2 h-auto w-40 bg-blue-500 flex flex-col justify-center text-white rounded-xl transition-all duration-500 -translate-y-20'>
+                    <div className='fixed bottom-0 right-2 h-auto w-40 bg-blue-500 flex flex-col justify-center text-white rounded-xl transition-all duration-500 -translate-y-20'>
                         {
                             createPost && (
                                 <div className='cursor-pointer bottom-8 right-2 h-10 w-full bg-blue-500 flex justify-center items-center rounded-xl'>
@@ -49,12 +57,11 @@ export const Auth = () => {
                                         Nova Noticia
                                     </Link>
                                 </div>
-                            )}
-
+                            )
+                        }
                         {
                             createRefs && (
                                 <div>
-
                                     <div className='cursor-pointer bottom-8 right-2 h-10 w-full bg-blue-500 flex justify-center items-center border-b border-b-white  border-t '>
                                         <Link href='/admin/restaurante/cadastrar/cardapio/'>
                                             Novo Cardapio
@@ -66,7 +73,6 @@ export const Auth = () => {
                                         </Link>
                                     </div>
                                 </div>
-
                             )
                         }
                     </div>

@@ -26,10 +26,10 @@ interface Alimentos {
 
 class RUAPI {
     alimento_route = () => {
-        return "http://localhost:8000/api/v1/alimentos/"
+        return "http://192.168.1.3:8000/api/v1/alimentos/"
     }
     cardapio_route = () => {
-        return "http://localhost:8000/api/v1/cardapios/"
+        return "http://192.168.1.3:8000/api/v1/cardapios/"
     }
 
     async getAlimento(id: number) {

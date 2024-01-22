@@ -116,22 +116,6 @@ const MealForm = (
                         })
                     }
                 </div>
-                <div className='flex flex-row gap-2 items-center justify-center max-md:w-full max-md:px-10 md:w-96 min-w-200 relative ' >
-                    <input type="text" placeholder='+ Adicional' className="w-full bg-slate-200 min-w-200 pr-20" id={meal} onKeyDown={
-                        (e) => {
-                            if (e.key === 'Enter') {
-                                add_additional(meal);
-                            }
-                        }
-                    } />
-                    <button className='bg-green-500 text-white w-1/5 absolute right-0 max-md:mr-10 h-14 rounded-2xl text-xl' onClick={
-                        () => {
-                            add_additional(meal);
-                        }
-                    }>
-                        <FontAwesomeIcon icon={faCheck} />
-                    </button>
-                </div>
             </div>
         </div>
     )

@@ -18,3 +18,7 @@
     object-fit: contain;
     overflow: hidden;
 }
+
+.text-with-direction {
+    direction: ltr;
+}

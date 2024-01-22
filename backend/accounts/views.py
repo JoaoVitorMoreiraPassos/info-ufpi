@@ -1,4 +1,4 @@
-from rest_framework.generics import CreateAPIView, RetrieveAPIView, UpdateAPIView
+from rest_framework.generics import CreateAPIView, RetrieveAPIView, UpdateAPIView, ListAPIView
 from rest_framework.response import Response
 from rest_framework import status, serializers
 from rest_framework_simplejwt.authentication import JWTAuthentication
@@ -7,6 +7,8 @@ from .serializers import UserSerializer, UserDetailSerializer
 
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.contrib.auth import get_user_model
+from rest_framework.pagination import PageNumberPagination
+
 
 
 class CadastrarAPIView(CreateAPIView):
@@ -39,7 +41,26 @@ class UserDetailAPIView(RetrieveAPIView):
     def get_object(self):
         return self.request.user
 
+class SearchUserAPIView(RetrieveAPIView):
+    serializer_class = UserDetailSerializer
 
+    def get_object(self):
+        username = self.kwargs.get("username")
+        return get_user_model().objects.get(username=username)
+
+
+# Paginar busca por usuários
+class SearchUsersPagination(PageNumberPagination):
+    page_size = 8
+
+class SearchUsersAPIView(ListAPIView):
+    serializer_class = UserDetailSerializer
+    pagination_class = SearchUsersPagination
+
+    def get_queryset(self):
+        username = self.kwargs.get("username")
+        return get_user_model().objects.filter(username__icontains=username).order_by("id")
+    
 class UserUpdateAPIView(UpdateAPIView):
     serializer_class = UserSerializer
     permission_classes = [IsAuthenticated]

@@ -43,21 +43,36 @@ const RecentNotice = ({ notice, favorito }: { notice: Notice, favorito: Favorito
             } onClick={
                 async (e) => {
                     if (isFavorite) {
-                        const response = await PostApi.DeleteFavoritePosts(notice.id);
-                        if (!response) return console.log('error');
-                        if (response == null) return console.log('error');
-                        if (response == undefined) return console.log('error');
-                        setIsFavorite(false);
+                        try {
+                            const response = await PostApi.DeleteFavoritePosts(notice.id);
+                            if (!response) return;
+                            if (response == null) return;
+                            if (response == undefined) return;
+                            setIsFavorite(false);
+                        } catch (error: any) {
+                            if (error.response.status === 401) {
+                                window.location.href = '/autenticacao/login';
+                                return;
+                            }
+                        }
                     } else {
-                        const response = await PostApi.CreateFavoritePosts(notice.id);
-                        if (!response) return console.log('error');
-                        if (response == null) return console.log('error');
-                        if (response == undefined) return console.log('error');
-                        setIsFavorite(true);
+                        try {
+                            const response = await PostApi.CreateFavoritePosts(notice.id);
+                            if (!response) return;
+                            if (response == null) return;
+                            if (response == undefined) return;
+                            setIsFavorite(true);
+                        } catch (error: any) {
+                            if (error.response.status === 401) {
+                                window.location.href = '/autenticacao/login';
+                                return;
+                            }
+
+                        }
                     }
                 }
             } />
-            <Link href={`noticias/${notice?.id}`} className=' underline flex items-center p-4'>
+            <Link href={`noticias/${notice?.id}`} className=' underline flex justify-start items-start p-4 max-[700px]:px-2 text-sm'>
                 {notice?.titulo_post}
             </Link>
         </div>

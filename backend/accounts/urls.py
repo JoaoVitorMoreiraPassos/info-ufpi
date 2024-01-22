@@ -6,12 +6,15 @@ from rest_framework_simplejwt.views import (
     TokenVerifyView,
 )
 
-from .views import CadastrarAPIView, UserDetailAPIView, UserUpdateAPIView
+from .views import CadastrarAPIView, UserDetailAPIView, UserPhotoUpdateAPIView, UserUpdateAPIView, SearchUserAPIView, SearchUsersAPIView
+
 
 
 urlpatterns = [
     path("cadastrar/", CadastrarAPIView.as_view(), name="cadastrar"),
     path("user-detail/", UserDetailAPIView.as_view(), name="user-detail"),
+    path("user-detail/<str:username>/", SearchUserAPIView.as_view(), name="user-detail"),
+    path("user-detail/search/<str:username>/", SearchUsersAPIView.as_view(), name="users-detail"),
     # path("user-detail/<int:pk>/", UserDetailAPIView.as_view(), name="user-detail"),
 
     path("user-update/", UserUpdateAPIView.as_view(), name="user-update"),

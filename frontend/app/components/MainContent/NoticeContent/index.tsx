@@ -45,6 +45,13 @@ interface Comentario {
     criacao: string;
 }
 
+interface ComentarioResponse {
+    count: number;
+    next: string;
+    previous: string;
+    results: Array<Comentario>;
+}
+
 const NoticeContent = ({ slug }: { slug: string }) => {
 
     const [title, setTitle] = useState('');
@@ -56,6 +63,7 @@ const NoticeContent = ({ slug }: { slug: string }) => {
     const [timePassed, setTimePassed] = useState('');
     const [commentIds, setCommentsIds] = useState<Array<number>>([]);
     const [comments, setComments] = useState<Array<Comentario>>([]);
+    const [commentsNext, setCommentsNext] = useState<string>('');
     const [comment, setComment] = useState('');
     const [user, setUser] = useState<string>();
     const [user_image, setUserImage] = useState<string>("");
@@ -66,7 +74,6 @@ const NoticeContent = ({ slug }: { slug: string }) => {
                 if (!slug) return;
                 const response: Noticia = await PostApi.GetPost(parseInt(slug[0]));
                 if (!response) {
-                    console.log("Notícia não encontrada");
                     return;
                 }
                 setTitle(response.titulo_post);
@@ -78,7 +85,6 @@ const NoticeContent = ({ slug }: { slug: string }) => {
                 setCommentsIds(response.comentarios);
             }
             catch (error: any) {
-                console.log(error)
             }
         }
         const getLoggedUser = async () => {
@@ -107,15 +113,15 @@ const NoticeContent = ({ slug }: { slug: string }) => {
                 if (!slug) return;
                 const id = parseInt(slug[0]);
                 const response = await PostApi.ListComments(id);
-                setComments(response)
+                setComments(response.results)
+                setCommentsNext(response.next)
                 console.log(comments)
             }
             catch (error) {
-                console.log(error);
             }
         }
         getComments()
-    }, [commentIds, slug, comments]);
+    }, [commentIds, slug]);
     useEffect(() => {
         document.title = title;
     }, [title, comments]);
@@ -151,21 +157,20 @@ const NoticeContent = ({ slug }: { slug: string }) => {
             const response: Comentario = await PostApi.CreateComment(post_id, comment, user.id);
             // Criar elemento de comentário
             setComment('');
-
-            const newComment = {
-                id: response.id,
-                post_comentario: response.post_comentario,
-                autor_comentario: response.id,
-                autor_comentario_nome: response.autor_comentario_nome,
-                imagem_autor_comentario: response.imagem_autor_comentario,
-                conteudo_comentario: comment,
-                criacao: response.criacao,
-            };
-            console.log(newComment)
-            setComments((comments) => [...comments, newComment]);
+            const getComments = async () => {
+                try {
+                    if (!slug) return;
+                    const id = parseInt(slug[0]);
+                    const response = await PostApi.ListComments(id);
+                    setComments(response.results)
+                    setCommentsNext(response.next)
+                }
+                catch (error) {
+                }
+            }
+            getComments()
         }
         catch (error: any) {
-            console.log(error);
             if (error.response.status === 401) {
                 alert('Você precisa estar logado para comentar');
                 return;
@@ -217,7 +222,7 @@ const NoticeContent = ({ slug }: { slug: string }) => {
                 <p className='text-2xl font-bold w-'>
                     Comentários
                 </p>
-                <div className='commentContainer flex flex-row justify-start items-center gap-2 p-2 w-full'>
+                <div className='commentContainer flex flex-row justify-start items-center gap-2 p-6 w-full'>
                     {
                         !user_image ? (
                             <FontAwesomeIcon icon={faUserAlt} className="rounded-full w-4 h-4 p-2 z-10 shadow-sm border-2" width={40} height={40} />
@@ -247,7 +252,6 @@ const NoticeContent = ({ slug }: { slug: string }) => {
                 <div className='w-full'>
                     {
                         comments.map((comment) => {
-                            console.log(comment)
                             return (
 
                                 <div className='commentContainer flex flex-row justify-start items-center gap-2 p-2 w-full mb-1' key={comment.id}>
@@ -277,6 +281,26 @@ const NoticeContent = ({ slug }: { slug: string }) => {
                                 </div>
                             )
                         })
+                    }
+                    {
+                        commentsNext != '' && commentsNext != null &&
+                        <button className='text-blue-500 w-56 h-10'
+                            onClick={
+                                async () => {
+                                    try {
+                                        if (!slug) return;
+                                        const id = parseInt(slug[0]);
+                                        const response = await PostApi.ListNextComments(commentsNext);
+                                        setComments([...comments, ...response.results])
+                                        setCommentsNext(response.next)
+                                        console.log(response)
+                                    }
+                                    catch (error) {
+                                    }
+                                }}
+
+
+                        >Carregar Mais...</button>
                     }
                 </div>
             </div>

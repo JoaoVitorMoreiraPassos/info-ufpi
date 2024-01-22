@@ -62,16 +62,25 @@ interface Favorito {
 
 class Post {
     route() {
-        return "http://localhost:8000/api/v1/posts/";
+        return "http://192.168.1.3:8000/api/v1/posts/";
     }
 
     favorite_route() {
-        return "http://localhost:8000/api/v1/favoritos/";
+        return "http://192.168.1.3:8000/api/v1/favoritos/";
     }
 
     async ListPost() {
         try {
             const response = await axios.get(this.route())
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    }
+    async ListNextPost(next: string) {
+        try {
+            console.log(next)
+            const response = await axios.get(next)
             return response.data;
         } catch (error) {
             throw error;
@@ -110,8 +119,16 @@ class Post {
     async ListComments(post_id: number) {
         try {
             const response: Comentarios = await axios.get(this.route() + post_id + "/comentarios/")
-            console.log(response)
-            return response.data.results
+            return response.data
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async ListNextComments(next: string) {
+        try {
+            const response = await axios.get(next)
+            return response.data
         } catch (error) {
             throw error
         }
@@ -145,12 +162,68 @@ class Post {
     async ListFavoritePosts() {
         try {
             const token = localStorage.getItem('access')
+            if (!token) {
+                throw Error("Token not found")
+            }
             const response = await axios.get(
                 this.favorite_route(),
                 {
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': 'Bearer ' + token
+                    }
+                }
+            );
+            return response.data
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async ListNextFavoritePosts(next: string) {
+        try {
+            const token = localStorage.getItem('access')
+            if (!token) {
+                throw Error("Token not found")
+            }
+            const response = await axios.get(
+                next,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    }
+                }
+            );
+            return response.data
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async ListPostsByUser(username: string) {
+        try {
+            const response = await axios.get(
+                this.route() + "search/" + username + "/",
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                }
+            );
+            return response.data
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async ListNextPostsByUser(next: string) {
+        try {
+            const response = await axios.get(
+                next,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
                     }
                 }
             );

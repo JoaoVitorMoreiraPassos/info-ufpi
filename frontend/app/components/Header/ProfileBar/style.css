@@ -6,11 +6,6 @@
     display: none;
 }
 
-.usernameFloat {
-    clip-path: polygon(50% 0%, 60% 11%, 100% 11%, 100% 100%, 0 100%, 0 11%, 40% 11%);
-    animation: usernameFloat 2s infinite;
-    border-radius: 0.5rem;
-}
 
 @keyframes usernameFloat {
     0% {
@@ -30,6 +25,7 @@
 
     .profileMob {
         display: flex;
+        width: 100%;
     }
 
 

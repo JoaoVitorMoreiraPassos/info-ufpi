@@ -50,6 +50,22 @@ class PostAPIView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [HasPostPermissions, ]
 
 
+class SearchAPIView(generics.ListAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+
+    def get_queryset(self):
+        search = self.kwargs.get("search")
+        return self.queryset.filter(titulo_post__icontains=search)
+
+class SearchPostByAutorAPIView(generics.ListAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+
+    def get_queryset(self):
+        search = self.kwargs.get("search")
+        return self.queryset.filter(autor_post__username=search)
+
 class ComentariosPagination(PageNumberPagination):
     page_size = 8
 
@@ -62,7 +78,7 @@ class ComentariosAPIView(generics.ListCreateAPIView):
 
     def get_queryset(self):
         if self.kwargs.get("post_pk"):
-            return self.queryset.filter(post_comentario_id=self.kwargs.get("post_pk"))
+            return self.queryset.filter(post_comentario_id=self.kwargs.get("post_pk")).order_by("-id")
 
         return self.queryset.all()
 
