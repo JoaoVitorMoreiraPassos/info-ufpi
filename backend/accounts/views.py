@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status, serializers
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
-from .serializers import UserSerializer, UserDetailSerializer, UserPhotoSerializer
+from .serializers import UserSerializer, UserDetailSerializer
 
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.contrib.auth import get_user_model
@@ -75,17 +75,3 @@ class UserUpdateAPIView(UpdateAPIView):
         self.perform_update(serializer)
         return Response(serializer.data)
 
-
-class UserPhotoUpdateAPIView(UpdateAPIView):
-    serializer_class = UserPhotoSerializer
-    permission_classes = [IsAuthenticated]
-
-    def get_object(self):
-        return self.request.user
-    
-    def update(self, request, *args, **kwargs):
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=True)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-        return Response(serializer.data)

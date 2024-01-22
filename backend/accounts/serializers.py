@@ -15,10 +15,10 @@ class UserSerializer(serializers.ModelSerializer):
             "email",
             "password",
             "foto_perfil",
-            "post_permissoes",
+            # "post_permissoes",
         ]
         extra_kwargs = {
-            "post_permissoes": {"read_only": True},
+            # "post_permissoes": {"read_only": True},
             "password": {"write_only": True},
         }
 
@@ -33,13 +33,8 @@ class UserDetailSerializer(serializers.ModelSerializer):
             "username",
             "email",
             "foto_perfil",
+            "is_staff",
             "post_permissoes",
             "refeicao_permissoes",
         ]
         # extra_kwargs = {'password': {'write_only': True}}
-
-
-class UserPhotoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ["foto_perfil"]
