@@ -62,8 +62,9 @@ export default function HomeContent() {
         const getCardapios = async () => {
             try {
                 const response = await api.getCardapio();
-                if (response.results.length === 0) return;
-                const cardapios: Cardapio[] = response.results;
+                if (response.length === 0) return;
+                const cardapios: Cardapio[] = response;
+                console.log(cardapios)
                 // get today date in brazilian timezone
                 const brazilianTimeZone = 'America/Sao_Paulo';
 
@@ -108,7 +109,7 @@ export default function HomeContent() {
                 if (!response) return;
                 if (response == null) return;
                 if (response == undefined) return;
-                const noticias: Notice[] = response.results;
+                const noticias: Notice[] = response.results
                 setNext(response.next);
                 for (let i = 0; i < noticias.length; i++) {
                     items.push(noticias[i]);
