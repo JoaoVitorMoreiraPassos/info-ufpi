@@ -35,7 +35,7 @@ class RUAPI {
         return host + "api/v1/cardapios/"
     }
 
-    async getAlimento(id: number) {
+    async getAlimento(id: Number) {
         try {
             const response = await axios.get(this.alimento_route() + id + "/")
 
@@ -70,7 +70,7 @@ class RUAPI {
         }
     }
 
-    async deleteAlimento(id: number) {
+    async deleteAlimento(id: Number) {
         try {
             const token = localStorage.getItem('access')
             const response = await axios.delete(this.alimento_route() + id + "/", {
@@ -94,6 +94,23 @@ class RUAPI {
         }
     }
 
+    async getCardapioByDate(date: string) {
+        try {
+            const token = localStorage.getItem('access')
+            const response = await axios.get(this.cardapio_route(),
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                })
+            console.log(response)
+            return response.data
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async postCardapio(data: any) {
         try {
             const token = localStorage.getItem('access')
@@ -109,10 +126,15 @@ class RUAPI {
         }
     }
 
-    async updateCardapio(id: number, data: any) {
+    async updateCardapio(id: Number | undefined, data: any) {
         try {
             const token = localStorage.getItem('access')
-            const response = await axios.put(this.cardapio_route() + id + "/", data)
+            const response = await axios.put(this.cardapio_route() + id + "/", data, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            })
             return response
         } catch (error) {
             throw error;
