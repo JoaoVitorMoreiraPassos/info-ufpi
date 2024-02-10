@@ -26,12 +26,26 @@ export default function CadastrarRefeicao() {
 
     useEffect(() => {
         const getUser = async () => {
-            const response = await UserApi.GetLoggedUser();
-            if (!response) window.location.href = '/';
-            if (!response?.refeicao_permissoes) window.location.href = '/perfil';
+            const token = localStorage.getItem('token');
+            const RefreshToken = localStorage.getItem('RefreshToken');
+            try {
+                const response = await UserApi.GetLoggedUser();
+                if (!response) { window.location.href = '/'; return };
+                if (!response?.refeicao_permissoes) window.location.href = '/perfil';
+            } catch (error: any) {
+                console.log(error.toString());
+                if (error.toString() === "Error: Token not found") {
+                    window.location.href = '/autenticacao/login';
+                    return;
+                }
+                else if (error.toString() === "Error: Refresh token não encontrado") {
+                    window.location.href = '/autenticacao/login';
+                    return;
+                }
+            }
         }
         getUser()
-    })
+    }, [])
 
     useEffect(() => {
         document.title = 'Cadastrar Refeição'

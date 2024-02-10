@@ -1,4 +1,10 @@
 input:not([type="file"]) {
     padding: 1rem;
-    padding-right: 5.5rem;
+    color: #fff
+}
+
+input:not([type="file"]):focus {
+    outline: none;
+    border: 1px solid #fff;
+    background: rgb(59 130 246 / 0.5);
 }

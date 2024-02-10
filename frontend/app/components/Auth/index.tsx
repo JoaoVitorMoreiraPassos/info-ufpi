@@ -49,7 +49,7 @@ export const Auth = () => {
             }
             {
                 floatIsOpen && (
-                    <div className='fixed bottom-0 right-2 h-auto w-40 bg-blue-500 flex flex-col justify-center text-white rounded-xl transition-all duration-500 -translate-y-20'>
+                    <div className='fixed bottom-0 right-2 h-auto w-40 bg-blue-500 flex flex-col justify-center text-white rounded-xl transition-all duration-500 -translate-y-20 z-50'>
                         {
                             createPost && (
                                 <div className='cursor-pointer bottom-8 right-2 h-10 w-full bg-blue-500 flex justify-center items-center rounded-xl'>
@@ -69,7 +69,7 @@ export const Auth = () => {
                                     </div>
                                     <div className='cursor-pointer bottom-8 right-2 h-10 w-full bg-blue-500 flex justify-center items-center rounded-xl'>
                                         <Link href='/admin/restaurante/cadastrar/alimento/'>
-                                            Nova Refeição
+                                            Novo Alimento
                                         </Link>
                                     </div>
                                 </div>

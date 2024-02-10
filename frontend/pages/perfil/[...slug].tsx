@@ -17,7 +17,7 @@ import Footer from '@/app/components/Footer';
 import NoticeCardPerfil from '@/app/components/MainContent/NoticeCardPerfil';
 import { Auth } from '@/app/components/Auth';
 import Link from 'next/link';
-
+import './style.css'
 
 
 interface Noticia {
@@ -185,7 +185,7 @@ export default function Perfil() {
                                     :
                                     <Image className="absolute top-0 left-0 w-full h-full object-cover z-0" width={1920} height={554} src={profile?.background_image} alt="background" />
                             } */}
-                            <div className={" bannerContent flex flex-col justify-center w-full h-1/4 z-50 items-start" + (screenWidth <= 1024 ? " items-center" : " items-start")}>
+                            <div className={" bannerContent flex flex-col justify-center w-full h-1/4 z-10 items-start" + (screenWidth <= 1024 ? " items-center" : " items-start")}>
                                 {
                                     !profile.foto_perfil ?
                                         <FontAwesomeIcon className="rounded-full w-20 h-20 p-14 z-10 bg-slate-300 text-white text-sm" icon={faUserAlt} />
@@ -206,42 +206,44 @@ export default function Perfil() {
                         <h1 className='text-black text-xl pl-14 pt-14 w-full max-[768px]:flex max-[768px]:justify-center max-[768px]:pl-0'>Notícias Publicadas:</h1>
                         {
                             noticias_publicadas.length > 0 ? (
-                                <div className=' carousel h-full flex w-full flex-row px-2 pb-14 ml-3 mr-3 justify-start items-start gap-5 overflow-x-scroll'>
-                                    {
-                                        noticias_publicadas.map((notice, index) => {
-                                            return (
-                                                <NoticeCardPerfil notice_infos={notice} key={'notice' + index} self_profile={false} />
-                                            )
-                                        })
-                                    }
-                                    {
-                                        noticiasNext &&
-                                        <button className='flex items-center justify-center self-center w-20 h-20 rounded-full' onClick={async () => {
-                                            if (!noticiasNext) return;
-                                            try {
-                                                const response = await PostApi.ListNextPostsByUser(noticiasNext);
-                                                if (!response) return;
-                                                if (response == null) return;
-                                                if (response == undefined) return;
+                                <div className="w-full flex justify-center items-center">
+                                    <div className=' my-carousel h-full flex w-11/12 max-md:w-full flex-row px-2 pb-2 ml-3 justify-start items-start gap-5 overflow-x-scroll mr-10 pr-10 max-md:mr-0 max-md:pr-0 max-md:ml-1'>
+                                        {
+                                            noticias_publicadas.map((notice, index) => {
+                                                return (
+                                                    <NoticeCardPerfil notice_infos={notice} key={'notice' + index} self_profile={isUserLogged} isMarked={false} showStar={!isUserLogged} />
+                                                )
+                                            })
+                                        }
+                                        {
+                                            noticiasNext &&
+                                            <button className='flex items-center justify-center self-center w-20 h-20 rounded-full' onClick={async () => {
+                                                if (!noticiasNext) return;
+                                                try {
+                                                    const response = await PostApi.ListNextPostsByUser(noticiasNext);
+                                                    if (!response) return;
+                                                    if (response == null) return;
+                                                    if (response == undefined) return;
 
-                                                setNoticiasNext(response.next);
-                                                setNoticiasPrevious(response.previous);
-                                                let items: Noticia[] = [];
-                                                for (let item in response.results) {
-                                                    items.push(response.results[item]);
+                                                    setNoticiasNext(response.next);
+                                                    setNoticiasPrevious(response.previous);
+                                                    let items: Noticia[] = [];
+                                                    for (let item in response.results) {
+                                                        items.push(response.results[item]);
+                                                    }
+                                                    setNoticiasPublicadas([...noticias_publicadas, ...items]);
                                                 }
-                                                setNoticiasPublicadas([...noticias_publicadas, ...items]);
-                                            }
-                                            catch (error: any) {
-                                                if (error.response.status === 401) {
-                                                    window.location.href = '/autenticacao/login';
-                                                    return;
+                                                catch (error: any) {
+                                                    if (error.response.status === 401) {
+                                                        window.location.href = '/autenticacao/login';
+                                                        return;
+                                                    }
                                                 }
-                                            }
-                                        }} >
-                                            <FontAwesomeIcon className="text-5xl text-slate-900" icon={faArrowAltCircleRight} />
-                                        </button>
-                                    }
+                                            }} >
+                                                <FontAwesomeIcon className="text-5xl text-slate-900" icon={faArrowAltCircleRight} />
+                                            </button>
+                                        }
+                                    </div>
                                 </div>
                             ) : (
                                 <h1 className='text-3xl text-center text-slate-900 mt-10 mb-10'>Este usuário não possui noticias cadastradas</h1>
@@ -252,45 +254,47 @@ export default function Perfil() {
                             <h1 className='text-black text-xl pl-14 pt-14 w-full max-[768px]:flex max-[768px]:justify-center max-[768px]:pl-0'>Notícias Favoritas:</h1>
                         }{
                             isUserLogged && favoritos.length > 0 && (
-                                <div className=' carousel h-full flex w-full flex-row px-2 pb-14 ml-3 mr-3 justify-start items-start gap-5 overflow-x-scroll'>
-                                    {
-                                        favoritos.map((notice, index) => {
-                                            return (
-                                                <NoticeCardPerfil notice_infos={notice} key={'notice' + index} self_profile={true} />
-                                            )
-                                        })
-                                    }
-                                    {
-                                        favoritosNext &&
-                                        <button className='flex items-center justify-center self-center w-20 h-full rounded-full mr-8' onClick={async () => {
-                                            if (!favoritosNext) return;
-                                            try {
-                                                const response = await PostApi.ListNextFavoritePosts(favoritosNext);
-                                                if (!response) return;
-                                                if (response == null) return;
-                                                if (response == undefined) return;
+                                <div className="w-full flex justify-center items-center">
+                                    <div className=' my-carousel h-full flex w-11/12 max-md:w-full flex-row px-2 pb-2 ml-3 justify-start items-start gap-5 overflow-x-scroll mb-12 mr-10 pr-10 max-md:mr-0 max-md:pr-0 max-md:ml-1'>
+                                        {
+                                            favoritos.map((notice, index) => {
+                                                return (
+                                                    <NoticeCardPerfil notice_infos={notice} key={'notice' + index} self_profile={isUserLogged} isMarked={true} showStar={!loggedUser} />
+                                                )
+                                            })
+                                        }
+                                        {
+                                            favoritosNext &&
+                                            <button className='flex items-center justify-center self-center w-20 h-full rounded-full mr-8' onClick={async () => {
+                                                if (!favoritosNext) return;
+                                                try {
+                                                    const response = await PostApi.ListNextFavoritePosts(favoritosNext);
+                                                    if (!response) return;
+                                                    if (response == null) return;
+                                                    if (response == undefined) return;
 
-                                                setFavoritosNext(response.next);
-                                                setFavoritosPrevious(response.previous);
-                                                let items: Noticia[] = [];
-                                                for (let item in response.results) {
-                                                    const noticia = await PostApi.GetPost(response.results[item].post_favorito);
-                                                    if (!noticia) continue;
-                                                    items.push(noticia);
+                                                    setFavoritosNext(response.next);
+                                                    setFavoritosPrevious(response.previous);
+                                                    let items: Noticia[] = [];
+                                                    for (let item in response.results) {
+                                                        const noticia = await PostApi.GetPost(response.results[item].post_favorito);
+                                                        if (!noticia) continue;
+                                                        items.push(noticia);
+                                                    }
+                                                    console.log([...favoritos, ...items])
+                                                    setFavoritos([...favoritos, ...items]);
                                                 }
-                                                console.log([...favoritos, ...items])
-                                                setFavoritos([...favoritos, ...items]);
-                                            }
-                                            catch (error: any) {
-                                                if (error.response.status === 401) {
-                                                    window.location.href = '/autenticacao/login';
-                                                    return;
+                                                catch (error: any) {
+                                                    if (error.response.status === 401) {
+                                                        window.location.href = '/autenticacao/login';
+                                                        return;
+                                                    }
                                                 }
-                                            }
-                                        }} >
-                                            <FontAwesomeIcon className="text-5xl text-slate-900" icon={faArrowAltCircleRight} />
-                                        </button>
-                                    }
+                                            }} >
+                                                <FontAwesomeIcon className="text-5xl text-slate-900" icon={faArrowAltCircleRight} />
+                                            </button>
+                                        }
+                                    </div>
                                 </div>
                             )}{
                             isUserLogged && favoritos.length == 0 &&
@@ -301,10 +305,10 @@ export default function Perfil() {
                         }
                     </main>
                 </div>
-            </div>
+            </div >
             <footer>
                 <Footer />
             </footer>
-        </div>
+        </div >
     )
 }

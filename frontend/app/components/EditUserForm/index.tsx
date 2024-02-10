@@ -18,14 +18,22 @@ export const EditUserForm = () => {
 
     useEffect(() => {
         const getUser = async () => {
-            const response = await UserApi.GetLoggedUser();
-            if (!response) window.location.href = '/autenticacao/login';
-            if (response) {
-                setFirstName(response.first_name);
-                setLastName(response.last_name);
-                setUsername(response.username);
-                setEmail(response.email);
-                setPreview(response.foto_perfil);
+            if (!localStorage.getItem('access') || !localStorage.getItem('refresh')) {
+                window.location.href = '/autenticacao/login';
+                return;
+            }
+            try {
+                const response = await UserApi.GetLoggedUser();
+                if (!response) window.location.href = '/autenticacao/login';
+                if (response) {
+                    setFirstName(response.first_name);
+                    setLastName(response.last_name);
+                    setUsername(response.username);
+                    setEmail(response.email);
+                    setPreview(response.foto_perfil);
+                }
+            } catch {
+                window.location.href = '/autenticacao/login';
             }
         }
         getUser();
@@ -58,11 +66,6 @@ export const EditUserForm = () => {
             toast.warning('Por favor, insira seu e-mail.');
             flag = false;
         }
-        // if (!image) {
-        //     document.getElementById('image')?.focus();
-        //     toast.warning('Por favor, insira sua imagem.')
-        //     flag = false;
-        // }
         return flag;
     };
 
@@ -132,7 +135,7 @@ export const EditUserForm = () => {
                         }
                     }}
                 >
-                    <span className="drop-title">Arraste a Image aqui<br /></span>
+                    <span className="drop-title">Arraste a imagem aqui<br /></span>
                     ou
                     <input type="file" name="image" id="image" className=' w-full flex justify-center items-center text-center' placeholder='Arrate uma imagem até aqui'
                         onChange={(e) => setImage(e.target.files?.[0])}

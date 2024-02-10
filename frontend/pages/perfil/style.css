@@ -1,0 +1,16 @@
+.my-carousel::-webkit-scrollbar {
+    width: 50%;
+    height: 10px;
+
+}
+
+.my-carousel::-webkit-scrollbar-track {
+    background: #888;
+    border-radius: 10rem;
+}
+
+.my-carousel::-webkit-scrollbar-thumb {
+    background-color: #478beb;
+    border-radius: 10rem;
+    width: 50%;
+}

@@ -6,6 +6,7 @@ import '@/app/globals.css'
 import { EditUserForm } from '@/app/components/EditUserForm'
 
 const ProfileEdit = () => {
+
     return (
         <div>
             <div className="flex min-h-screen flex-row justify-start">

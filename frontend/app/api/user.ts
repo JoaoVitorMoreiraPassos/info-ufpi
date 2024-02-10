@@ -193,7 +193,7 @@ class User {
                     localStorage.clear();
                     throw error;
                 }
-                else if (error.response.status === 401) {
+                else if (error.toString() == "Error: Refresh Token não encontrado") {
                     localStorage.clear();
                     throw error;
                 }
