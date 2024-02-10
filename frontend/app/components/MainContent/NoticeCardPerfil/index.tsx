@@ -23,18 +23,20 @@ interface Noticia {
     comentarios: [number];
 };
 
-const NoticeCardPerfil = ({ notice_infos, self_profile }: { notice_infos: Noticia, self_profile: boolean }) => {
+const NoticeCardPerfil = ({ notice_infos, self_profile, isMarked, showStar }: { notice_infos: Noticia, self_profile: boolean, isMarked: boolean, showStar: boolean }) => {
     const cardStyle = {
         fontFamily: 'Inria Serif',
         backgroundColor: '#4985ADCC',
         minWidth: '300px',
-        width: '500px',
+        width: '300px',
+        height: '375px',
         color: 'white',
-        height: '100%',
+        borderRadius: '10px',
         overflow: 'hidden',
+
     }
     const [timePassed, setTimePassed] = useState('');
-    const [isFavorite, setIsFavorite] = useState<boolean>(self_profile);
+    const [isFavorite, setIsFavorite] = useState<boolean>(isMarked);
     const [text, setText] = useState<string>('text-yellow-500');
 
     useEffect(() => {
@@ -46,8 +48,6 @@ const NoticeCardPerfil = ({ notice_infos, self_profile }: { notice_infos: Notici
     }, [isFavorite])
 
     useEffect(() => {
-        const brazilianTimeZone = 'America/Sao_Paulo';
-
         const calculateTimePassed = () => {
             if (!notice_infos.criacao) return;
             if (notice_infos.criacao === '') return;
@@ -67,8 +67,8 @@ const NoticeCardPerfil = ({ notice_infos, self_profile }: { notice_infos: Notici
     }, [notice_infos.criacao]);
 
     return (
-        <div className=' card flex justify-center items-start py-2 gap-4 h-full mr-5 overflow-hidden' style={cardStyle}>
-            <div className=' flex flex-row w-full gap-2 items-center justify-center px-4 overflow-hidden'>
+        <div className=' flex flex-col justify-start items-start py-2 gap-4 mr-5 overflow-hidden' style={cardStyle}>
+            <div className=' flex flex-row w-full gap-2 items-center justify-center px-4 overflow-hidden h-auto py-6'>
                 {
                     notice_infos.autor_imagem_post == null ?
                         <FontAwesomeIcon className="rounded-full w-3 h- p-3 z-10 bg-slate-300 text-white text-sm" icon={faUserAlt} />
@@ -83,40 +83,43 @@ const NoticeCardPerfil = ({ notice_infos, self_profile }: { notice_infos: Notici
                         Postado há {timePassed}
                     </p>
                 </div>
-                <FontAwesomeIcon icon={faStar} className={
-                    text + ' text-2xl mr-2 transition duration-500 ease-in-out cursor-pointer'
-                } onClick={
-                    async () => {
-                        if (isFavorite) {
-                            try {
-                                const response = await PostApi.DeleteFavoritePosts(notice_infos.id);
-                                if (!response) return;
-                                if (response == null) return;
-                                if (response == undefined) return;
-                                setIsFavorite(false);
-                            }
-                            catch (error: any) {
-                                if (error.response.status === 401) {
-                                    window.location.href = '/autenticacao/login';
-                                    return;
+                {
+                    showStar &&
+                    <FontAwesomeIcon icon={faStar} className={
+                        text + ' text-2xl mr-2 transition duration-500 ease-in-out cursor-pointer'
+                    } onClick={
+                        async () => {
+                            if (isFavorite) {
+                                try {
+                                    const response = await PostApi.DeleteFavoritePosts(notice_infos.id);
+                                    if (!response) return;
+                                    if (response == null) return;
+                                    if (response == undefined) return;
+                                    setIsFavorite(false);
                                 }
-                            }
-                        } else {
-                            try {
-                                const response = await PostApi.CreateFavoritePosts(notice_infos.id);
-                                if (!response) return;
-                                if (response == null) return;
-                                if (response == undefined) return;
-                                setIsFavorite(true);
-                            } catch (error: any) {
-                                if (error.response.status === 401) {
-                                    window.location.href = '/autenticacao/login';
-                                    return;
+                                catch (error: any) {
+                                    if (error.response.status === 401) {
+                                        window.location.href = '/autenticacao/login';
+                                        return;
+                                    }
+                                }
+                            } else {
+                                try {
+                                    const response = await PostApi.CreateFavoritePosts(notice_infos.id);
+                                    if (!response) return;
+                                    if (response == null) return;
+                                    if (response == undefined) return;
+                                    setIsFavorite(true);
+                                } catch (error: any) {
+                                    if (error.response.status === 401) {
+                                        window.location.href = '/autenticacao/login';
+                                        return;
+                                    }
                                 }
                             }
                         }
-                    }
-                } />
+                    } />
+                }
             </div>
             <Link className=' w-full px-4' href={`/noticias/${notice_infos.id}`}>
                 {
@@ -134,7 +137,7 @@ const NoticeCardPerfil = ({ notice_infos, self_profile }: { notice_infos: Notici
             </Link>
             <Link className=' description overflow-hidden' href={`/noticias/${notice_infos.id}`}>
                 <p className=' text-md p-6 overflow-hidden text-ellipsis text-with-direction w-fit'>
-                    {notice_infos.conteudo_post.substring(0, 100) + '...'}
+                    {notice_infos.conteudo_post.substring(0, 125) + '...'}
                 </p>
             </Link>
         </div >

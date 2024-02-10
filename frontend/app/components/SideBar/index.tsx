@@ -62,7 +62,7 @@ const SideBar = () => {
                         </div>
                     </li>
                     <li className='flex gap-1 justify-center items-center border-t' key='search_user'>
-                        <input value={user_to_search} id={"search_users_id"} type="text" placeholder="Pesquisar usuário" className="border rounded-md h-12 w-100 pl-4 " onFocus={
+                        <input value={user_to_search} id={"search_users_id"} type="text" placeholder="Pesquisar usuário" className="border rounded-md h-12 w-100 pl-4 max-md:text-center " onFocus={
                             (e) => {
                                 setIsOnSearch(true);
                             }
@@ -98,8 +98,8 @@ const SideBar = () => {
                         !isOnSearch &&
                         menu_options.map((option, index) => {
                             return (
-                                <li key={"side_menu_option_" + option.id} className=' border-t flex gap-1 items-center h-14'>
-                                    <Link href={option.link} className='py-3'>
+                                <li key={"side_menu_option_" + option.id} className=' border-t flex gap-1 items-center h-14' >
+                                    <Link href={option.link} className='py-3' onClick={openCloseSideBar}>
                                         <i className='px-3 w-10'>
                                             {option.icon}
                                         </i>

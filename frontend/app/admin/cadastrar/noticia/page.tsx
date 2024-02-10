@@ -15,8 +15,15 @@ import { toast, ToastContainer } from 'react-toastify';
 const CadastrarNoticia = () => {
     useEffect(() => {
         const getUser = async () => {
-            const response = await UserApi.GetLoggedUser();
-            if (!response) window.location.href = '/';
+            try {
+                const response = await UserApi.GetLoggedUser();
+                if (!response) window.location.href = '/';
+            } catch (error: any) {
+                if (error.toString() === "Error: Token not found") {
+                    window.location.href = '/autenticacao/login';
+                    return;
+                }
+            }
         }
         getUser()
     })

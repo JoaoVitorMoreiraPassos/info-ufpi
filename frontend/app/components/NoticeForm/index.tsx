@@ -114,7 +114,7 @@ const NoticeForm = () => {
                                 }
                             }}
                         >
-                            <span className="drop-title">Arraste a Image aqui<br /></span>
+                            <span className="drop-title">Arraste a imagem aqui<br /></span>
                             ou
                             <input type="file" name="image" id="image" className=' w-full flex justify-center items-center text-center' placeholder='Arrate uma imagem até aqui'
                                 onChange={(e) => setImage(e.target.files?.[0])}

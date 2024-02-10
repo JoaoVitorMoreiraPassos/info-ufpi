@@ -25,7 +25,6 @@ const RecipeItemRegister = ({ items, title, tipo }: { items: Item[], title: stri
                 tipo_refeicao: type,
             })
             if (response.status === 201) {
-                alert('Refeição cadastrada com sucesso!');
                 const input = document.querySelector(`#${type}`) as HTMLInputElement;
                 if (newItem !== '') {
                     const item: Item = {

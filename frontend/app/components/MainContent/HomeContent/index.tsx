@@ -10,7 +10,8 @@ import api from '@/app/api/ru'
 import { format } from 'date-fns-tz'
 import { AirplanemodeActive } from '@mui/icons-material'
 import './style.css'
-
+import { Skeleton } from '@mui/material'
+import NoticeCardPerfil from '../NoticeCardPerfil'
 
 
 const inter = Inter({ subsets: ['latin'] })
@@ -56,7 +57,8 @@ export default function HomeContent() {
     const [almoco, setAlmoco] = useState<Alimento[]>()
     const [jantar, setJantar] = useState<Alimento[]>()
     const [next, setNext] = useState<string>('')
-
+    const [loadingCardapio, setLoadingCardapio] = useState<boolean>(true)
+    const [loadingNotices, setLoadingNotices] = useState<boolean>(true)
 
     useEffect(() => {
         const getCardapios = async () => {
@@ -98,7 +100,9 @@ export default function HomeContent() {
                 }
                 setAlmoco(almoco_alimentos);
                 setJantar(jantar_alimentos);
+                setLoadingCardapio(false);
             } catch (error: any) {
+                setLoadingCardapio(false);
                 return;
             }
         }
@@ -114,7 +118,9 @@ export default function HomeContent() {
                 for (let i = 0; i < noticias.length; i++) {
                     items.push(noticias[i]);
                 }
+                setLoadingNotices(false);
             } catch (error: any) {
+                setLoadingNotices(false);
                 return;
             }
             setRecentNotices(items);
@@ -142,42 +148,20 @@ export default function HomeContent() {
         run();
     }, [])
 
-    // const em_alta = [
-    //     { "id": 1, "title": "Restaurante", "image": "/ru imagem.png", },
-    //     { "id": 2, "title": "Biblioteca", "image": "/livros.png", },
-    //     { "id": 3, "title": "Núcleo de assistencia estudantil", "image": "/nae.png", },
-    // ]
+
     return (
         <div className='flex-col p-6 max-[360px]:px-2 mt-8 '>
-            {/* <div className='flex-col'>
-                <div>
-                    <h1 className={' pb-4 text-xl ' + inter.className}>Em alta</h1>
-                </div>
-                <div className='flex gap-8 carousel'>
-                    <ul className='flex gap-8 carousel' >
-                        {
-                            em_alta.length > 0 && em_alta.map((noticia, index) => {
-                                return (
-                                    <li key={"fire_card" + index}>
-                                        <NoticeCard noticia={noticia} key={"fire_card" + index} />
-                                        
-                                    </li>
-                                )
-                            })
-                        }
-                    </ul>
-                </div>
-            </div> */}
+
             {
-                (almoco?.length ?? 0) > 0 && (jantar?.length ?? 0) > 0 &&
+                !loadingCardapio && almoco && jantar &&
                 <div className="cardapios w-full flex justify-center ">
                     <div className='flex-col flex-wrap w-full'>
                         <div className='flex justify-center items-center w-full'>
                             <h1 className={' pb-4 text-xl flex justify-center w-full items-center text-center text-gray-600' + inter.className}>Cardápios de Hoje</h1>
                         </div>
                         <div className='flex flex-row gap-8 w-full justify-center text-white flex-wrap'>
-                            <div className='cardapioContainer min-w-100 flex-col w-2/5 bg-blue-300 rounded-md py-6'>
-                                <h1 className='text-xl justify-center w-full text-center underline'>Almoço</h1>
+                            <div className='cardapioContainer min-w-100 flex-col w-2/5 bg-blue-600 rounded-md py-6'>
+                                <h1 className='text-xl justify-center w-full text-center '>Almoço</h1>
                                 <div className=' min-w-100 flex flex-col gap-4 w-full justify-center px-2 '>
                                     <div className='flex flex-row justify-center px-1 border-white border rounded-xl '>
                                         <div className=' w-1/2 border-r-white border-r flex flex-col items-center'>
@@ -211,8 +195,8 @@ export default function HomeContent() {
                                     </div>
                                 </div>
                             </div>
-                            <div className='cardapioContainer flex-col w-2/5 bg-blue-300 rounded-md py-6'>
-                                <h1 className='text-xl justify-center text-center underline'>Jantar</h1>
+                            <div className='cardapioContainer flex-col w-2/5 bg-blue-600 rounded-md py-6'>
+                                <h1 className='text-xl justify-center text-center'>Jantar</h1>
                                 <div className='flex flex-col gap-4 justify-center px-2'>
                                     <div className='flex flex-row justify-center px-1 border-white border rounded-xl flex-wrap'>
                                         <div className='normal min-w-100 w-1/2 border-r-white border-r flex flex-col items-center'>
@@ -258,9 +242,26 @@ export default function HomeContent() {
                 </div>
             }
             {
-                (almoco?.length ?? 0) === 0 && (jantar?.length ?? 0) === 0 &&
+                (almoco?.length ?? 0) === 0 && (jantar?.length ?? 0) === 0 && !loadingCardapio &&
                 <div className='flex justify-center items-center w-full h-72'>
                     <p className='text-2xl text-gray-600'>Não há cardápio para hoje</p>
+                </div>
+            }
+            {
+                loadingCardapio &&
+                <div className="w-full flex justify-center items-center">
+
+                    <div className="flex justify-center flex-col items-center w-4/5">
+                        <Skeleton variant="text" width={"25%"} height={50} />
+                        <div className='flex justify-center items-center w-full h-72 gap-3 px-10'>
+                            <Skeleton variant="rectangular" width={"45%"} height={250} style={
+                                { borderRadius: "10px" }
+                            } />
+                            <Skeleton variant="rectangular" width={"45%"} height={250} style={
+                                { borderRadius: "10px" }
+                            } />
+                        </div>
+                    </div>
                 </div>
             }
             <div className={'py-10 px-28 max-[700px]:px-2 max-[360px]:px-0 max-[360px]:w-full ' + inter.className}>
@@ -270,13 +271,15 @@ export default function HomeContent() {
                     </h1>
                 </div>
                 {
-                    recentNotices.length === 0 && <p className=' text-sm'>Não há noticias recentes</p>
+                    recentNotices.length === 0 && !loadingNotices &&
+                    <p className=' text-sm'>Não há noticias recentes</p>
                 }
                 {
                     recentNotices.length > 0 &&
                     <div className='flex-col h-auto'>
                         <ul>
                             {
+
                                 recentNotices.length > 0 && recentNotices.map((notice, index) => {
                                     return (
                                         <li key={"recent_card_" + index}>
@@ -305,6 +308,23 @@ export default function HomeContent() {
                                 }} className='text-blue-500'>Carregar mais</button>
                             }
                         </ul>
+                    </div>
+                }
+                {
+                    loadingNotices &&
+                    <div className='flex flex-col justify-start items-start w-full h-72 pt-4 gap-4'>
+                        <Skeleton variant="rectangular" width={"100%"} height={75} style={
+                            { borderRadius: "10px" }
+                        } />
+                        <Skeleton variant="rectangular" width={"100%"} height={75} style={
+                            { borderRadius: "10px" }
+                        } />
+                        <Skeleton variant="rectangular" width={"100%"} height={75} style={
+                            { borderRadius: "10px" }
+                        } />
+                        <Skeleton variant="rectangular" width={"100%"} height={75} style={
+                            { borderRadius: "10px" }
+                        } />
                     </div>
                 }
             </div>

@@ -72,7 +72,7 @@ const RecentNotice = ({ notice, favorito }: { notice: Notice, favorito: Favorito
                     }
                 }
             } />
-            <Link href={`noticias/${notice?.id}`} className=' underline flex justify-start items-start p-4 max-[700px]:px-2 text-sm'>
+            <Link href={`noticias/${notice?.id}`} className=' underline flex flex-col justify-start items-start p-4 max-[700px]:px-2 text-sm'>
                 {notice?.titulo_post}
             </Link>
         </div>
